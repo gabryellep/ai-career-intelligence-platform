@@ -1,0 +1,138 @@
+# ============================================================
+# .gitignore — AI Resume Analyzer
+# ============================================================
+
+# ============================================================
+# Python
+# ============================================================
+
+# Bytecode e cache
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+
+# Distribuição e empacotamento
+*.egg-info/
+*.egg
+dist/
+build/
+wheels/
+*.whl
+MANIFEST
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Variáveis de ambiente e segredos
+.env
+.env.local
+.env.*.local
+*.env
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# Logs Python
+*.log
+
+# ============================================================
+# FastAPI / Uvicorn
+# ============================================================
+
+# Arquivos de upload temporários
+uploads/
+tmp/
+
+# ============================================================
+# Node.js / React / Vite
+# ============================================================
+
+# Dependências
+node_modules/
+
+# Build de produção
+dist/
+build/
+
+# Cache do Vite
+.vite/
+frontend/.vite/
+
+# Variáveis de ambiente do frontend
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+# ============================================================
+# Editores e IDEs
+# ============================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains (PyCharm, WebStorm)
+.idea/
+*.iml
+
+# Vim / Neovim
+*.swp
+*.swo
+*~
+
+# ============================================================
+# Sistemas operacionais
+# ============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+
+# ============================================================
+# Miscelânea
+# ============================================================
+
+# Ignorar PDFs sensíveis por padrão (evitar commit de currículos reais)
+*.pdf
+
+# Permitir PDFs de exemplo para demonstração do projeto
+!examples/
+!examples/*.pdf
+
+# Arquivos comprimidos
+*.zip
+*.tar.gz
+*.rar
+
+# Ferramentas locais / assistentes
+.kiro/
+
+# Configurações locais do VS Code
+.vscode/
