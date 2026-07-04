@@ -10,10 +10,10 @@ Nos últimos meses construí o **AI Career Intelligence Platform**: uma platafor
 
 A decisão técnica mais importante do projeto: comecei com um motor 100% determinístico e explicável (regras, aliases, matching ponderado) — sem IA generativa, sem "caixa preta" — porque queria um resultado auditável antes de qualquer coisa. Só depois adicionei, como camadas **opcionais** e aditivas: matching semântico via embeddings (calibrado empiricamente, com métricas reais de precision/recall) e feedback textual via LLM rodando localmente (Ollama) — nenhum dos dois altera o score determinístico, e ambos ficam desligados por padrão em produção por razões documentadas (peso de deploy e ausência de infraestrutura para um LLM local, respectivamente).
 
-Stack: FastAPI + PostgreSQL no backend, React no frontend, mais de 240 testes automatizados, CI com GitHub Actions, deploy real (Render + Vercel).
+Stack: FastAPI + PostgreSQL no backend, React no frontend, 277 testes automatizados, CI com GitHub Actions, deploy real (Render + Vercel).
 
-Repositório: [link do GitHub]
-Demo: [link da demo pública]
+Repositório: https://github.com/gabryellep/ai-resume-analyzer
+Demo: https://ai-career-intelligence-platform-beta.vercel.app/
 
 #Python #FastAPI #React #IA #SoftwareEngineering #Portfolio
 
@@ -35,11 +35,11 @@ Passei os últimos meses evoluindo um projeto de portfólio — **AI Career Inte
 
 **Por que nenhuma das duas camadas de IA está ligada na demo pública**: não é por estarem incompletas — ambas têm testes automatizados e documentação de privacidade. É uma decisão de infraestrutura documentada: os embeddings dependem de uma biblioteca pesada (torch) incompatível com o plano gratuito de hospedagem atual; o LLM depende de um processo Ollama que simplesmente não existe no ambiente de deploy. Achei mais honesto documentar isso claramente do que fingir que está tudo ativo.
 
-**O resto da engenharia**: API REST versionada, persistência em PostgreSQL (nunca o PDF ou o texto bruto — só hashes e metadados), isolamento por sessão anônima (não é autenticação real, e digo isso explicitamente na documentação), mais de 240 testes automatizados (incluindo testes de integração contra um Postgres real, não só mocks), CI no GitHub Actions, deploy real no Render + Vercel.
+**O resto da engenharia**: API REST versionada, persistência em PostgreSQL (nunca o PDF ou o texto bruto — só hashes e metadados), isolamento por sessão anônima (não é autenticação real, e digo isso explicitamente na documentação), 277 testes automatizados (incluindo testes de integração contra um Postgres real, não só mocks), CI no GitHub Actions, deploy real no Render + Vercel.
 
 Não é um projeto que promete "revolucionar recrutamento" — é um exercício de engenharia honesta: motor explicável primeiro, IA depois, com evidência antes de cada decisão que impacta o usuário.
 
-Repositório: [link do GitHub]
-Demo: [link da demo pública]
+Repositório: https://github.com/gabryellep/ai-resume-analyzer
+Demo: https://ai-career-intelligence-platform-beta.vercel.app/
 
 #Python #FastAPI #React #MachineLearning #Embeddings #LLM #Ollama #SoftwareEngineering #AIEngineering #Portfolio

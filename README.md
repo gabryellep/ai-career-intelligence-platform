@@ -110,7 +110,13 @@ flowchart LR
 
 ## Screenshots
 
-Checklist de capturas e instruções em [docs/images/README.md](docs/images/README.md) — ainda não capturadas nesta versão.
+Capturas com dados sintéticos, sem currículo real ou vaga real identificável. Checklist e regras de captura em [docs/images/README.md](docs/images/README.md).
+
+![Tela inicial](docs/images/home.png)
+
+![Resultado da análise](docs/images/result.png)
+
+![Demo curta](docs/images/demo.gif)
 
 ---
 
@@ -201,9 +207,7 @@ Detalhamento completo em [PRIVACY.md](PRIVACY.md).
 
 - Gráficos profissionais no frontend
 - Radar de skills
-- Plano de evolução de carreira
-- Distinção entre requisitos obrigatórios e desejáveis
-- Detecção de senioridade
+- Evolução longitudinal do Career Improvement Plan entre análises
 - Comparação com múltiplas vagas
 - Exportação do resultado em PDF
 - Autenticação de usuários

@@ -13,14 +13,18 @@ O que está planejado, mas ainda não implementado (ou implementado apenas local
 
 - **Gráficos profissionais no frontend** — visualizações mais ricas para o dashboard (hoje usa componentes simples, sem biblioteca de gráficos).
 - **Radar de skills** — visualização comparando o perfil do candidato com o perfil ideal da vaga.
-- **Plano de evolução de carreira** — uma visão mais narrativa combinando gaps recorrentes entre análises.
+- **Evolução longitudinal do Career Improvement Plan** — hoje o plano é gerado por análise individual; uma versão futura pode comparar gaps recorrentes entre várias análises.
 
 ## Motor de análise
 
-- **Distinção entre requisitos obrigatórios e desejáveis** ("must-have" vs. "nice-to-have") na descrição da vaga, hoje tratados com o mesmo peso.
-- **Detecção de senioridade** — o motor hoje não infere nível de experiência a partir do texto do currículo.
 - **Comparação com múltiplas vagas simultaneamente** — hoje a análise é sempre 1 currículo × 1 vaga.
 - Suporte a DOCX e OCR para PDFs baseados em imagem.
+
+## Já implementado recentemente
+
+- **Distinção entre requisitos obrigatórios, desejáveis e menções negadas** — o motor contextual já diferencia `required`, `optional` e `ignored` na descrição da vaga, com score explicável.
+- **Detecção de senioridade explícita da vaga** — o parser contextual já identifica termos como `junior`, `pleno/mid-level`, `senior`, `lead`, `staff` e `principal` na descrição da vaga.
+- **Career Improvement Plan por análise** — o backend já gera um plano determinístico a partir de `missing_skills` e `partial_skills`, e o frontend renderiza o campo quando ele existe.
 
 ## Produto
 
