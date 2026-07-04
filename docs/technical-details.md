@@ -59,6 +59,12 @@ score = round(pontos_obtidos / total_de_skills_exigidas * 100)
 
 Exemplo: vaga pede Python, Docker, AWS e inglês avançado; currículo tem Python e inglês intermediário → `(1.0 + 0.5) / 4 * 100 = 38`.
 
+### Contexto da descrição da vaga
+
+Antes do matching final, a descrição da vaga passa por uma camada determinística que classifica cada skill já extraída como `required`, `optional` ou `ignored`. Marcadores como "must have", "required", "obrigatório" mantêm peso `1.0`; marcadores como "nice to have", "plus", "desejável" e "diferencial" entram com peso `0.35`; menções negadas como "not required", "no experience required" e "não é necessário" saem do matching.
+
+O mesmo parser detecta senioridade explícita (`junior`, `pleno/mid-level`, `senior`, `lead`, `staff`, `principal`, `intern`) e inclui a explicação em `match_details.job_context`, junto de categoria, peso e trecho de evidência por skill. Essa camada não usa LLM, não cria novas skills e preserva o comportamento histórico quando a vaga não traz marcadores contextuais.
+
 Recomendações e insights (pontos fortes/fracos/próximos passos) são gerados a partir das skills faltantes/parciais e do score geral — sempre texto determinístico, nunca gerado por modelo de linguagem.
 
 ---

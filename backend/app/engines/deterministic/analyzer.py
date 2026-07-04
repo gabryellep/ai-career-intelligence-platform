@@ -48,7 +48,12 @@ from app.core.config import ENABLE_SEMANTIC_MATCHING
 from app.engines.deterministic.parser import extract_text
 from app.engines.deterministic.skills import extract_skills
 from app.engines.deterministic.recommender import generate_recommendations
-from app.engines.deterministic.matcher import analyze_skill_match, calculate_weighted_score
+from app.engines.deterministic.job_context import (
+    active_job_skills,
+    analyze_job_context,
+    calculate_contextual_score,
+)
+from app.engines.deterministic.matcher import analyze_skill_match
 
 # Limite de caracteres do texto extraído para evitar processamento excessivo
 MAX_TEXT_LENGTH = 10_000
@@ -356,9 +361,14 @@ def analyze(
         resume_skills = list(extract_skills(resume_text) or [])
         job_skills = list(extract_skills(job_text) or [])
 
-        # Passo 4: matching inteligente via matcher (suporta matching parcial)
-        skill_match = analyze_skill_match(resume_skills, job_skills)
-        weighted_score = calculate_weighted_score(skill_match)
+        # Passo 4: interpreta contexto da vaga e roda matching inteligente.
+        # Mencoes negadas ("nao e necessario Docker") nao entram no matching;
+        # requisitos desejaveis continuam visiveis, mas com peso menor no score.
+        job_context = analyze_job_context(job_text, job_skills)
+        matching_job_skills = active_job_skills(job_context)
+        skill_match = analyze_skill_match(resume_skills, matching_job_skills)
+        weighted_score = calculate_contextual_score(skill_match, job_context)
+        skill_match["job_context"] = job_context
 
         matched_skills = list(skill_match.get("matched", []))
         partial_skills = list(skill_match.get("partial", []))
@@ -370,7 +380,14 @@ def analyze(
         recommendations = list(generate_recommendations(missing_skills, score, partial_skills) or [])
 
         # Passo 6: gera insights (inclui partial_skills)
-        insights = _generate_insights(resume_skills, job_skills, matched_skills, missing_skills, partial_skills, score)
+        insights = _generate_insights(
+            resume_skills,
+            matching_job_skills,
+            matched_skills,
+            missing_skills,
+            partial_skills,
+            score,
+        )
 
         result = {
             "score": score,

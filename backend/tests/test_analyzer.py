@@ -313,6 +313,20 @@ def test_analyze_extra_skills_not_in_job():
 # ---------------------------------------------------------------------------
 
 
+def test_analyze_uses_contextual_job_requirements():
+    """Skills desejaveis pesam menos e mencoes negadas nao viram gap."""
+    pdf_bytes = create_pdf_with_text("Python")
+    job = "Required: Python. Docker is a plus. No experience with AWS required. Senior role."
+
+    result = analyze(pdf_bytes, job)
+
+    assert "python" in result["matched_skills"]
+    assert "docker" in result["missing_skills"]
+    assert "aws" not in result["missing_skills"]
+    assert result["score"] == 74
+    assert result["match_details"]["job_context"]["seniority"] == "senior"
+
+
 def test_analyze_with_flag_disabled_omits_semantic_fields(monkeypatch):
     """Com ENABLE_SEMANTIC_MATCHING desligada (padrão), os 3 campos semânticos não aparecem."""
     monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", False)
