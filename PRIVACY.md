@@ -13,8 +13,8 @@ Ao usar a aplicação, o usuário envia:
 
 1. O PDF é recebido pela API (`POST /analyze`) e mantido **apenas em memória**, durante a própria requisição — nunca salvo em disco.
 2. O texto é extraído do PDF (via PyMuPDF) para identificar skills, idiomas e outras informações relevantes à comparação com a vaga.
-3. A resposta (score, skills, insights, recomendações) é devolvida ao usuário na mesma requisição.
-4. **A partir da SPEC 0004**, um registro estruturado dessa análise é salvo em um banco de dados PostgreSQL — ver seção abaixo para o que exatamente é armazenado.
+3. A resposta (score, skills, insights, recomendações e, quando houver lacunas reais, `career_improvement_plan`) é devolvida ao usuário na mesma requisição.
+4. **A partir da SPEC 0004**, quando o banco está configurado, um registro com metadados e partes estruturadas dessa análise é salvo em um banco de dados PostgreSQL — ver seção abaixo para o que exatamente é armazenado.
 
 ## O que passa a ser armazenado (desde a SPEC 0004)
 
@@ -24,7 +24,9 @@ Para cada análise bem-sucedida, o sistema grava:
 - um **hash SHA-256** e o **comprimento** do texto extraído do currículo (não o texto em si);
 - um **hash SHA-256** e o **comprimento** da descrição da vaga (não o texto em si);
 - as **skills técnicas identificadas na vaga** (ex.: "python", "docker") — nomes de tecnologias, não dado pessoal;
-- o **score de compatibilidade**, as **skills classificadas** (matched/partial/missing/extra), os **insights** e as **recomendações** gerados pelo motor determinístico — ou seja, o mesmo resultado estruturado que já é devolvido na resposta da API.
+- o **score de compatibilidade**, as **skills classificadas** (matched/partial/missing/extra), os **insights** e as **recomendações** gerados pelo motor determinístico.
+
+O `career_improvement_plan`, quando gerado, é exibido no resultado imediato de `POST /analyze`, mas **não é persistido atualmente no histórico/banco**.
 
 Hashes servem apenas para rastreabilidade técnica (ex.: identificar se duas análises usaram o mesmo arquivo) — não é possível reconstituir o conteúdo original do currículo ou da vaga a partir de um hash SHA-256.
 
@@ -50,7 +52,7 @@ Antes da SPEC 0009, o histórico e os analytics eram **globais**: qualquer clien
 
 ## Consulta ao histórico de análises (desde a SPEC 0005)
 
-Existem dois endpoints de leitura: `GET /api/v1/analyses` (lista paginada, com filtros por score mínimo e por skill) e `GET /api/v1/analyses/{id}` (detalhe de uma análise). Ambos retornam exatamente os mesmos dados descritos na seção "O que passa a ser armazenado" acima (score, skills, insights, recomendações, data) — **nunca** PDF, texto bruto ou hashes. Desde a SPEC 0009, ambos exigem o header `X-Session-Id` e retornam apenas análises daquela sessão — `422` se o header estiver ausente ou for inválido; `404` (nunca `403`) para uma análise que existe mas pertence a outra sessão.
+Existem dois endpoints de leitura: `GET /api/v1/analyses` (lista paginada, com filtros por score mínimo e por skill) e `GET /api/v1/analyses/{id}` (detalhe de uma análise). Ambos retornam os dados descritos na seção "O que passa a ser armazenado" acima (score, skills, insights, recomendações, data) — **nunca** PDF, texto bruto, hashes ou `career_improvement_plan`. Desde a SPEC 0009, ambos exigem o header `X-Session-Id` e retornam apenas análises daquela sessão — `422` se o header estiver ausente ou for inválido; `404` (nunca `403`) para uma análise que existe mas pertence a outra sessão.
 
 **Mitigação em camadas**: os endpoints de histórico ficam **desligados por padrão**, controlados pela variável de ambiente `ENABLE_HISTORY_API` (`false` por padrão). Quando desligados, respondem `404`, como se não existissem. Eles só são ligados (`ENABLE_HISTORY_API=true`) em ambiente de testes/CI — **no deploy público, permanecem desligados até que autenticação real seja implementada**, já que o isolamento por sessão anônima (acima) não substitui autenticação de verdade.
 
@@ -62,7 +64,7 @@ Existem três endpoints de agregação: `GET /api/v1/analytics/summary` (total d
 
 ## Consentimento
 
-O frontend exige que o usuário marque uma caixa de consentimento antes de enviar o currículo. A partir da SPEC 0004, esse consentimento cobre também o armazenamento dos metadados descritos acima (hashes, score, skills, insights e recomendações) — nunca o PDF ou o texto bruto.
+O frontend exige que o usuário marque uma caixa de consentimento antes de enviar o currículo. A partir da SPEC 0004, esse consentimento cobre também o armazenamento dos metadados descritos acima (hashes, score, skills, insights e recomendações) — nunca o PDF, o texto bruto ou o `career_improvement_plan`. Na demo pública, histórico e analytics continuam desativados.
 
 ## Validações de segurança aplicadas ao upload
 

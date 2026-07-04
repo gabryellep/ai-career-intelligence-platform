@@ -28,10 +28,11 @@ As capturas versionadas usam apenas dados sintéticos e uma resposta de análise
 
 1. Suba o projeto localmente com Docker Compose (`cp .env.example .env && docker compose up --build`) — ver seção "Como rodar com Docker" do README.
 2. Para `home.png`/`result.png`: use um currículo **fictício** (ex.: gere um PDF simples com um nome genérico como "João da Silva" ou use um template de exemplo sem dados reais de ninguém) e uma descrição de vaga também fictícia. **Nunca** use um currículo real (seu ou de terceiros).
-3. Para `dashboard.png`/`analytics.png`: ligue `ENABLE_HISTORY_API=true` e `ENABLE_ANALYTICS_API=true` no seu `.env` local (não no `.env.example`), rode 2–3 análises com os mesmos dados sintéticos do passo 2, e capture a aba "Histórico e Dashboard".
-4. Para `llm-feedback.png`: instale o [Ollama](https://ollama.com/), rode `ollama pull llama3.1`, ligue `ENABLE_LLM_FEEDBACK=true` no seu `.env` local, refaça uma análise e capture a resposta (via Swagger `/docs`, `curl`, ou a interface, se exibir os campos) mostrando `llm_summary` e os demais campos.
-5. Para `architecture.png`: opcional — um diagrama exportado de uma ferramenta de diagramação (ex.: Excalidraw, draw.io), complementar ao diagrama Mermaid já existente no corpo do README.
-6. Para `demo.gif`: grave a tela (ex.: com uma ferramenta de gravação de tela leve) fazendo o fluxo completo descrito no README, usando os mesmos dados sintéticos.
+3. Para `dashboard.png`: mantenha `ENABLE_HISTORY_API=false` e `ENABLE_ANALYTICS_API=false`, ou use a demo pública, e capture a aba "Histórico e Dashboard" mostrando o estado desativado.
+4. Para `analytics.png`: em ambiente local/dev, ligue `ENABLE_HISTORY_API=true` e `ENABLE_ANALYTICS_API=true` no seu `.env` local (não no `.env.example`), rode 2–3 análises com os mesmos dados sintéticos do passo 2, e capture os cards/listas de histórico e analytics.
+5. Para `llm-feedback.png`: instale o [Ollama](https://ollama.com/), rode `ollama pull llama3.1`, ligue `ENABLE_LLM_FEEDBACK=true` no seu `.env` local, refaça uma análise e capture a resposta (via Swagger `/docs`, `curl`, ou a interface, se exibir os campos) mostrando `llm_summary` e os demais campos.
+6. Para `architecture.png`: opcional — um diagrama exportado de uma ferramenta de diagramação (ex.: Excalidraw, draw.io), complementar ao diagrama Mermaid já existente no corpo do README.
+7. Para `demo.gif`: grave a tela (ex.: com uma ferramenta de gravação de tela leve) fazendo o fluxo completo descrito no README, usando os mesmos dados sintéticos.
 
 ## Artefatos gerados nesta fase
 

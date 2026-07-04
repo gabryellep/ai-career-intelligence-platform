@@ -13,6 +13,7 @@ O que está planejado, mas ainda não implementado (ou implementado apenas local
 
 - **Gráficos profissionais no frontend** — visualizações mais ricas para o dashboard (hoje usa componentes simples, sem biblioteca de gráficos).
 - **Radar de skills** — visualização comparando o perfil do candidato com o perfil ideal da vaga.
+- **Persistir/exibir Career Improvement Plan no histórico local/dev** — hoje o plano aparece apenas no resultado imediato de `POST /analyze`; o histórico local/dev ainda mostra score, skills, insights e recomendações.
 - **Evolução longitudinal do Career Improvement Plan** — hoje o plano é gerado por análise individual; uma versão futura pode comparar gaps recorrentes entre várias análises.
 
 ## Motor de análise

@@ -73,6 +73,8 @@ Quando existem `missing_skills` ou `partial_skills`, o backend adiciona `career_
 
 O campo fica ausente quando não há lacunas reais. A orientação de currículo sempre reforça que uma skill só deve ser adicionada depois de estudo, projeto ou experiência comprovável. O plano não promete emprego, entrevista, aprovação ou contratação, e não usa LLM como fonte de verdade.
 
+Limitação conhecida: o `career_improvement_plan` é exibido no resultado imediato da análise, mas ainda não é persistido nem reconstruído nas telas de Histórico e Dashboard local/dev. Isso não afeta a demo pública, onde histórico e analytics continuam desativados por padrão.
+
 ---
 
 ## Matching semântico via embeddings (opcional)
