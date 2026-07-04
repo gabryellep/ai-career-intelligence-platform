@@ -9,8 +9,7 @@ Testa a função generate_recommendations com os seguintes cenários:
 5. Uma recomendação por skill faltante (até 8)
 """
 
-from app.recommender import generate_recommendations
-
+from app.engines.deterministic.recommender import generate_recommendations
 
 # ---------------------------------------------------------------------------
 # Mensagens esperadas (constantes para evitar typos nos testes)
@@ -37,6 +36,7 @@ MSG_ALTA = (
 # ---------------------------------------------------------------------------
 # Testes: sem skills faltantes
 # ---------------------------------------------------------------------------
+
 
 def test_no_missing_skills_returns_congratulations():
     """Sem skills faltantes deve retornar apenas a mensagem de parabéns."""
@@ -66,6 +66,7 @@ def test_no_missing_skills_score_high_returns_only_congratulations():
 # Testes: score < 40
 # ---------------------------------------------------------------------------
 
+
 def test_low_score_includes_warning_message():
     """Score < 40 deve incluir mensagem de baixa compatibilidade."""
     result = generate_recommendations(["docker", "aws"], 30)
@@ -91,6 +92,7 @@ def test_score_40_does_not_include_low_warning():
 # Testes: score >= 80
 # ---------------------------------------------------------------------------
 
+
 def test_high_score_includes_positive_message():
     """Score >= 80 deve incluir mensagem positiva."""
     result = generate_recommendations(["docker"], 85)
@@ -115,6 +117,7 @@ def test_score_79_does_not_include_high_message():
 # ---------------------------------------------------------------------------
 # Testes: limite máximo de recomendações
 # ---------------------------------------------------------------------------
+
 
 def test_max_recommendations_never_exceeds_10():
     """O retorno nunca deve exceder 10 recomendações."""
@@ -149,6 +152,7 @@ def test_all_items_are_strings():
 # Testes: uma recomendação por skill faltante (até 8)
 # ---------------------------------------------------------------------------
 
+
 def test_one_recommendation_per_missing_skill():
     """Deve gerar uma recomendação para cada skill faltante."""
     missing = ["docker", "aws", "kubernetes"]
@@ -182,6 +186,7 @@ def test_skills_beyond_limit_are_not_included():
 # ---------------------------------------------------------------------------
 # Testes de ordem e conteúdo exato
 # ---------------------------------------------------------------------------
+
 
 def test_exact_output_low_score():
     """Valida que o resultado com score < 40 contém recomendações de skill e mensagem de baixa compatibilidade."""

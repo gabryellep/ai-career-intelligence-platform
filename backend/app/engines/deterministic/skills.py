@@ -20,48 +20,150 @@ from itertools import chain
 
 SKILL_CATEGORIES: dict[str, list[str]] = {
     "programming_languages": [
-        "python", "java", "javascript", "typescript", "c", "c++", "c#",
-        "go", "r", "rust", "kotlin", "swift", "php", "ruby", "scala",
-        "dart", "elixir", "haskell", "lua", "perl", "matlab",
+        "python",
+        "java",
+        "javascript",
+        "typescript",
+        "c",
+        "c++",
+        "c#",
+        "go",
+        "r",
+        "rust",
+        "kotlin",
+        "swift",
+        "php",
+        "ruby",
+        "scala",
+        "dart",
+        "elixir",
+        "haskell",
+        "lua",
+        "perl",
+        "matlab",
     ],
     "backend": [
-        "fastapi", "django", "flask", "node.js", "express", "spring boot",
-        "laravel", "rails", "nestjs", "gin", "fiber",
+        "fastapi",
+        "django",
+        "flask",
+        "node.js",
+        "express",
+        "spring boot",
+        "laravel",
+        "rails",
+        "nestjs",
+        "gin",
+        "fiber",
     ],
     "frontend": [
-        "react", "next.js", "vue", "angular", "svelte", "nuxt",
-        "gatsby", "remix", "html", "css",
+        "react",
+        "next.js",
+        "vue",
+        "angular",
+        "svelte",
+        "nuxt",
+        "gatsby",
+        "remix",
+        "html",
+        "css",
     ],
     "data_ai": [
-        "pandas", "numpy", "scikit-learn", "tensorflow", "pytorch", "keras",
-        "matplotlib", "seaborn", "plotly", "jupyter", "spark", "airflow",
-        "mlflow", "hugging face", "langchain", "xgboost", "lightgbm",
-        "opencv", "machine learning", "deep learning", "nlp",
-        "computer vision", "data science", "data engineering",
+        "pandas",
+        "numpy",
+        "scikit-learn",
+        "tensorflow",
+        "pytorch",
+        "keras",
+        "matplotlib",
+        "seaborn",
+        "plotly",
+        "jupyter",
+        "spark",
+        "airflow",
+        "mlflow",
+        "hugging face",
+        "langchain",
+        "xgboost",
+        "lightgbm",
+        "opencv",
+        "machine learning",
+        "deep learning",
+        "nlp",
+        "computer vision",
+        "data science",
+        "data engineering",
     ],
     "devops": [
-        "docker", "kubernetes", "terraform", "ansible", "jenkins",
-        "github actions", "gitlab ci", "circleci", "ci/cd", "linux",
-        "nginx", "apache", "prometheus", "grafana", "git",
+        "docker",
+        "kubernetes",
+        "terraform",
+        "ansible",
+        "jenkins",
+        "github actions",
+        "gitlab ci",
+        "circleci",
+        "ci/cd",
+        "linux",
+        "nginx",
+        "apache",
+        "prometheus",
+        "grafana",
+        "git",
     ],
     "databases": [
-        "postgresql", "mysql", "sqlite", "sql server", "oracle", "mariadb",
-        "mongodb", "redis", "elasticsearch", "dynamodb", "cassandra",
-        "firebase", "neo4j", "couchdb",
+        "postgresql",
+        "mysql",
+        "sqlite",
+        "sql server",
+        "oracle",
+        "mariadb",
+        "mongodb",
+        "redis",
+        "elasticsearch",
+        "dynamodb",
+        "cassandra",
+        "firebase",
+        "neo4j",
+        "couchdb",
     ],
     "cloud": [
-        "aws", "azure", "gcp", "heroku", "vercel", "netlify", "cloudflare",
+        "aws",
+        "azure",
+        "gcp",
+        "heroku",
+        "vercel",
+        "netlify",
+        "cloudflare",
     ],
     "languages": [
         # Idiomas — nomes canônicos com nível
         # A detecção real é feita via regex em _LANGUAGE_PATTERNS
-        "english_basic", "english_intermediate", "english_advanced",
-        "espanhol", "frances", "alemao", "mandarin", "japones",
+        "english_basic",
+        "english_intermediate",
+        "english_advanced",
+        "espanhol",
+        "frances",
+        "alemao",
+        "mandarin",
+        "japones",
     ],
     "soft_skills": [
-        "agile", "scrum", "kanban", "tdd", "bdd",
-        "rest api", "graphql", "grpc", "websocket", "microservices",
-        "oauth", "jwt", "swagger", "postman", "figma", "jira",
+        "agile",
+        "scrum",
+        "kanban",
+        "tdd",
+        "bdd",
+        "rest api",
+        "graphql",
+        "grpc",
+        "websocket",
+        "microservices",
+        "oauth",
+        "jwt",
+        "swagger",
+        "postman",
+        "figma",
+        "jira",
     ],
 }
 
@@ -80,47 +182,38 @@ SKILLS_DICT: list[str] = sorted(set(chain.from_iterable(SKILL_CATEGORIES.values(
 _ALIASES: dict[str, str] = {
     # Cloud
     "amazon web services": "aws",
-    "google cloud":        "gcp",
+    "google cloud": "gcp",
     "google cloud platform": "gcp",
-    "microsoft azure":     "azure",
-
+    "microsoft azure": "azure",
     # Bancos de dados
-    "postgres":            "postgresql",
-    "postgres sql":        "postgresql",
-    "postgre sql":         "postgresql",
-
+    "postgres": "postgresql",
+    "postgres sql": "postgresql",
+    "postgre sql": "postgresql",
     # Node.js
-    "node":                "node.js",
-    "nodejs":              "node.js",
-    "node js":             "node.js",
-
+    "node": "node.js",
+    "nodejs": "node.js",
+    "node js": "node.js",
     # JavaScript / TypeScript
-    "js":                  "javascript",
-    "ts":                  "typescript",
-
+    "js": "javascript",
+    "ts": "typescript",
     # CI/CD
-    "ci cd":               "ci/cd",
-    "ci-cd":               "ci/cd",
-
+    "ci cd": "ci/cd",
+    "ci-cd": "ci/cd",
     # Machine Learning
-    "machine-learning":    "machine learning",
-    "ml":                  "machine learning",
-
+    "machine-learning": "machine learning",
+    "ml": "machine learning",
     # Deep Learning
-    "deep-learning":       "deep learning",
-    "dl":                  "deep learning",
-
+    "deep-learning": "deep learning",
+    "dl": "deep learning",
     # NLP
     "natural language processing": "nlp",
-
     # Computer Vision
-    "cv":                  "computer vision",
-
+    "cv": "computer vision",
     # Outros
-    "k8s":                 "kubernetes",
-    "tf":                  "tensorflow",
-    "sk-learn":            "scikit-learn",
-    "sklearn":             "scikit-learn",
+    "k8s": "kubernetes",
+    "tf": "tensorflow",
+    "sk-learn": "scikit-learn",
+    "sklearn": "scikit-learn",
 }
 
 # ---------------------------------------------------------------------------
@@ -153,23 +246,72 @@ _LANGUAGE_PATTERNS: list[tuple[str, str]] = [
         "english_basic",
     ),
     # Outros idiomas
-    (r"espanhol|espa[nñ]ol|spanish",   "espanhol"),
-    (r"franc[eê]s|french",             "frances"),
-    (r"alem[aã]o|german|deutsch",      "alemao"),
+    (r"espanhol|espa[nñ]ol|spanish", "espanhol"),
+    (r"franc[eê]s|french", "frances"),
+    (r"alem[aã]o|german|deutsch", "alemao"),
     (r"mandarim|mandarin|chin[eê]s|chinese", "mandarin"),
-    (r"japon[eê]s|japanese",           "japones"),
+    (r"japon[eê]s|japanese", "japones"),
 ]
 
 # Skills de idioma — não devem ser detectadas via dicionário principal
 _LANGUAGE_CANONICAL = {
-    "english_basic", "english_intermediate", "english_advanced",
-    "espanhol", "frances", "alemao", "mandarin", "japones",
+    "english_basic",
+    "english_intermediate",
+    "english_advanced",
+    "espanhol",
+    "frances",
+    "alemao",
+    "mandarin",
+    "japones",
 }
+
+# ---------------------------------------------------------------------------
+# Skills curtas/ambíguas — não podem ser detectadas por substring simples
+#
+# "go", "c" e "r" são, respectivamente, uma palavra comum do inglês ("let's
+# go", "go to market") e duas letras isoladas — mesmo com boundary de \w,
+# qualquer ocorrência isolada dessas palavras/letras em texto comum (não
+# necessariamente sobre programação) seria um falso positivo. Por isso não
+# entram no laço de substring simples (excluídas via _SHORT_AMBIGUOUS_SKILLS,
+# igual ao tratamento de idiomas) — só são detectadas por frases de contexto
+# seguro em _SHORT_SKILL_PATTERNS.
+# ---------------------------------------------------------------------------
+
+_SHORT_AMBIGUOUS_SKILLS = {"go", "c", "r"}
+
+_SHORT_SKILL_PATTERNS: list[tuple[str, str]] = [
+    (
+        r"\bgolang\b"
+        r"|\bgo\s+language\b"
+        r"|\bgo\s+programming\s+language\b"
+        r"|\bgo\s+programming\b"
+        r"|\bprogramming\s+in\s+go\b"
+        r"|\blinguagem\s+go\b",
+        "go",
+    ),
+    (
+        r"\bc\s+programming\s+language\b"
+        r"|\bc\s+programming\b"
+        r"|\bprogramming\s+in\s+c\b"
+        r"|\bc\s+language\b"
+        r"|\blinguagem\s+c\b",
+        "c",
+    ),
+    (
+        r"\br\s+programming\s+language\b"
+        r"|\br\s+programming\b"
+        r"|\bprogramming\s+in\s+r\b"
+        r"|\br\s+language\b"
+        r"|\blinguagem\s+r\b",
+        "r",
+    ),
+]
 
 
 # ---------------------------------------------------------------------------
 # Extração de Skills
 # ---------------------------------------------------------------------------
+
 
 def extract_skills(text: str) -> list[str]:
     """
@@ -203,13 +345,22 @@ def extract_skills(text: str) -> list[str]:
 
     found: set[str] = set()
 
-    # Passo 2: extração via dicionário (exclui skills de idioma — tratadas separadamente)
+    # Passo 2: extração via dicionário (exclui skills de idioma — tratadas
+    # separadamente — e skills curtas/ambíguas como "go"/"c"/"r", que exigem
+    # contexto seguro em vez de substring simples — ver Passo 2.5)
     for skill in SKILLS_DICT:
-        if skill in _LANGUAGE_CANONICAL:
+        if skill in _LANGUAGE_CANONICAL or skill in _SHORT_AMBIGUOUS_SKILLS:
             continue
         pattern = r"(?<!\w)" + re.escape(skill) + r"(?!\w)"
         if re.search(pattern, text_lower):
             found.add(skill)
+
+    # Passo 2.5: skills curtas/ambíguas ("go", "c", "r") — só entram por
+    # frase de contexto seguro (ex.: "golang", "c programming"), nunca por
+    # ocorrência isolada da palavra/letra (ver _SHORT_SKILL_PATTERNS).
+    for pattern, canonical_name in _SHORT_SKILL_PATTERNS:
+        if re.search(pattern, text_lower):
+            found.add(canonical_name)
 
     # Passo 3: detecção de idioma com nível
     # Verifica avançado e intermediário antes do básico para evitar falso básico

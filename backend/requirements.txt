@@ -16,6 +16,10 @@ pymupdf==1.24.3
 # Validação de dados e schemas
 pydantic==2.7.1
 
-# Testes
-pytest==8.2.0
+# Persistência — ORM, migrations e driver PostgreSQL (SPEC 0004)
+sqlalchemy==2.0.51
+alembic==1.13.3
+psycopg2-binary==2.9.12
+
+# Cliente HTTP — usado em runtime por app/services/llm_providers/ollama_provider.py (SPEC 0014)
 httpx==0.27.0

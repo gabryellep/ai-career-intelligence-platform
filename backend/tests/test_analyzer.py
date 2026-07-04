@@ -9,12 +9,15 @@ de arquivos externos.
 """
 
 import fitz  # PyMuPDF
-from app.analyzer import analyze
 
+import app.engines.deterministic.analyzer as analyzer_module
+import app.engines.semantic.hybrid as hybrid_module
+from app.engines.deterministic.analyzer import analyze
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def create_pdf_with_text(text: str) -> bytes:
     """Cria um PDF simples em memória com o texto fornecido."""
@@ -38,6 +41,7 @@ def create_empty_pdf() -> bytes:
 # ---------------------------------------------------------------------------
 # Testes: estrutura do retorno
 # ---------------------------------------------------------------------------
+
 
 def test_analyze_returns_required_keys():
     """O retorno deve conter as 4 chaves obrigatórias."""
@@ -79,6 +83,7 @@ def test_analyze_score_in_valid_range():
 # Testes: PDF com texto
 # ---------------------------------------------------------------------------
 
+
 def test_analyze_with_matching_skills():
     """PDF com skills da vaga deve retornar matched_skills não vazio."""
     pdf_bytes = create_pdf_with_text("Python FastAPI Docker")
@@ -117,6 +122,7 @@ def test_analyze_recommendations_not_empty_when_missing_skills():
 # ---------------------------------------------------------------------------
 # Testes: PDF sem texto
 # ---------------------------------------------------------------------------
+
 
 def test_analyze_with_empty_pdf_returns_valid_structure():
     """PDF sem texto deve retornar estrutura válida com listas vazias ou padrão."""
@@ -177,6 +183,7 @@ def test_analyze_with_invalid_bytes_returns_valid_structure():
 # Testes: campo de debug
 # ---------------------------------------------------------------------------
 
+
 def test_analyze_debug_false_no_preview():
     """Sem debug=True, o campo resume_text_preview não deve estar presente."""
     pdf_bytes = create_pdf_with_text("Python FastAPI")
@@ -212,6 +219,7 @@ def test_analyze_debug_preview_max_500_chars():
 # ---------------------------------------------------------------------------
 # Testes dos novos campos (Bloco 3 — integração com matcher)
 # ---------------------------------------------------------------------------
+
 
 def test_analyze_returns_partial_skills_field():
     """O retorno deve conter o campo 'partial_skills'."""
@@ -298,3 +306,95 @@ def test_analyze_extra_skills_not_in_job():
     for skill in result["extra_skills"]:
         assert skill not in result["matched_skills"]
         assert skill not in result["missing_skills"]
+
+
+# ---------------------------------------------------------------------------
+# Testes: matching semântico opcional (SPEC 0011)
+# ---------------------------------------------------------------------------
+
+
+def test_analyze_with_flag_disabled_omits_semantic_fields(monkeypatch):
+    """Com ENABLE_SEMANTIC_MATCHING desligada (padrão), os 3 campos semânticos não aparecem."""
+    monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", False)
+
+    pdf_bytes = create_pdf_with_text("Python FastAPI")
+    job = "Buscamos Python, FastAPI e AWS."
+
+    result = analyze(pdf_bytes, job)
+
+    assert "semantic_score" not in result
+    assert "hybrid_score" not in result
+    assert "semantic_matches" not in result
+
+
+def test_analyze_semantic_enrichment_never_changes_deterministic_fields(monkeypatch):
+    """
+    Com a flag ligada e o serviço semântico mockado com sucesso, score,
+    matched_skills, missing_skills, partial_skills, extra_skills e
+    match_details devem permanecer idênticos ao resultado sem a flag —
+    prova de que o motor determinístico não foi alterado por esta Spec.
+    """
+    pdf_bytes = create_pdf_with_text("Python FastAPI Docker")
+    job = "Buscamos Python, FastAPI e AWS."
+
+    monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", False)
+    baseline = analyze(pdf_bytes, job)
+
+    monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", True)
+    monkeypatch.setattr(
+        hybrid_module,
+        "enrich_with_semantic_matching",
+        lambda skill_match, score: {"semantic_score": 99, "hybrid_score": 95, "semantic_matches": []},
+    )
+    enriched = analyze(pdf_bytes, job)
+
+    assert enriched["score"] == baseline["score"]
+    assert enriched["matched_skills"] == baseline["matched_skills"]
+    assert enriched["missing_skills"] == baseline["missing_skills"]
+    assert enriched["partial_skills"] == baseline["partial_skills"]
+    assert enriched["extra_skills"] == baseline["extra_skills"]
+    assert enriched["match_details"] == baseline["match_details"]
+
+    assert enriched["semantic_score"] == 99
+    assert enriched["hybrid_score"] == 95
+    assert enriched["semantic_matches"] == []
+
+
+def test_analyze_semantic_failure_falls_back_silently(monkeypatch):
+    """
+    Se o serviço semântico lançar uma exceção (dependência ausente, erro de
+    modelo etc.), analyze() não deve propagar — apenas omite os 3 campos,
+    mantendo o resultado determinístico intacto.
+    """
+    monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", True)
+
+    def _raise(skill_match, score):
+        raise RuntimeError("falha simulada do serviço de embeddings")
+
+    monkeypatch.setattr(hybrid_module, "enrich_with_semantic_matching", _raise)
+
+    pdf_bytes = create_pdf_with_text("Python FastAPI")
+    job = "Buscamos Python."
+
+    result = analyze(pdf_bytes, job)
+
+    assert "semantic_score" not in result
+    assert "hybrid_score" not in result
+    assert "semantic_matches" not in result
+    assert isinstance(result["score"], int)
+    assert isinstance(result["matched_skills"], list)
+
+
+def test_analyze_semantic_returns_none_falls_back_silently(monkeypatch):
+    """Se enrich_with_semantic_matching retornar None (fallback interno), os campos ficam ausentes."""
+    monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", True)
+    monkeypatch.setattr(hybrid_module, "enrich_with_semantic_matching", lambda skill_match, score: None)
+
+    pdf_bytes = create_pdf_with_text("Python FastAPI")
+    job = "Buscamos Python."
+
+    result = analyze(pdf_bytes, job)
+
+    assert "semantic_score" not in result
+    assert "hybrid_score" not in result
+    assert "semantic_matches" not in result
