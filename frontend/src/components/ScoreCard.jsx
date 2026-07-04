@@ -3,9 +3,10 @@
  *
  * Props:
  *   score (number) — valor entre 0 e 100
+ *   stats (object) — contagens reais de matched/missing/partial/extra
  */
 
-function ScoreCard({ score }) {
+function ScoreCard({ score, stats }) {
   // Garante que o score fique sempre no intervalo válido
   const safeScore = Math.max(0, Math.min(100, score));
 
@@ -21,12 +22,22 @@ function ScoreCard({ score }) {
     return 'Baixa compatibilidade';
   }
 
+  function getScoreDescription(value) {
+    if (value >= 80) return 'O currículo cobre a maior parte das skills identificadas na vaga.';
+    if (value >= 40) return 'Há uma base útil, mas alguns gaps ainda merecem prioridade.';
+    return 'A vaga exige várias skills que ainda não aparecem no currículo enviado.';
+  }
+
   const barColor = getBarColor(safeScore);
   const scoreLabel = getScoreLabel(safeScore);
 
   return (
-    <div className="score-card">
-      <h2 className="score-card-title">Score de Compatibilidade</h2>
+    <section className="score-card">
+      <div className="score-card-copy">
+        <p className="section-eyebrow">Score explicável</p>
+        <h3>Compatibilidade geral</h3>
+        <p>{getScoreDescription(safeScore)}</p>
+      </div>
 
       <div className="score-value" aria-label={`Score: ${safeScore} de 100`}>
         <span className="score-number">{safeScore}</span>
@@ -52,7 +63,24 @@ function ScoreCard({ score }) {
           }}
         />
       </div>
-    </div>
+
+      {stats && (
+        <dl className="score-breakdown" aria-label="Resumo das skills">
+          <div>
+            <dt>Atendidas</dt>
+            <dd>{stats.matched}</dd>
+          </div>
+          <div>
+            <dt>Faltantes</dt>
+            <dd>{stats.missing}</dd>
+          </div>
+          <div>
+            <dt>Parciais</dt>
+            <dd>{stats.partial}</dd>
+          </div>
+        </dl>
+      )}
+    </section>
   );
 }
 

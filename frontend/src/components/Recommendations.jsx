@@ -11,13 +11,14 @@ function Recommendations({ recommendations }) {
   if (!recommendations || recommendations.length === 0) return null;
 
   return (
-    <div className="recommendations-card">
-      <h2 className="recommendations-title">
-        <span className="recommendations-icon">📋</span> Recomendações
-      </h2>
-      <p className="recommendations-subtitle">
-        Ações concretas para melhorar sua compatibilidade com esta vaga.
-      </p>
+    <section className="recommendations-card">
+      <div className="panel-heading">
+        <div>
+          <p className="section-eyebrow">Prioridades</p>
+          <h3>Recomendações acionáveis</h3>
+          <p>Ações concretas para melhorar sua compatibilidade com esta vaga.</p>
+        </div>
+      </div>
       <ol className="recommendations-list">
         {recommendations.map((rec, index) => (
           <li key={index} className="recommendation-item">
@@ -26,7 +27,7 @@ function Recommendations({ recommendations }) {
           </li>
         ))}
       </ol>
-    </div>
+    </section>
   );
 }
 

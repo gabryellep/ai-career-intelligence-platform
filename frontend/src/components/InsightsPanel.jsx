@@ -20,17 +20,20 @@ function InsightsPanel({ insights, partialSkills = [], extraSkills = [] }) {
   if (!hasContent) return null;
 
   return (
-    <div className="insights-card">
-      <h2 className="insights-title">Análise do Perfil</h2>
+    <section className="insights-card">
+      <div className="panel-heading">
+        <div>
+          <p className="section-eyebrow">Leitura do perfil</p>
+          <h3>Análise do perfil para esta vaga</h3>
+        </div>
+      </div>
 
       {/* Grade: pontos fortes + pontos de atenção */}
       <div className="insights-grid">
 
         {strengths.length > 0 && (
           <div className="insights-section insights-section--strengths">
-            <h3 className="insights-section-title">
-              <span className="insights-icon">💪</span> Pontos Fortes
-            </h3>
+            <h4 className="insights-section-title">Pontos Fortes</h4>
             <ul className="insights-list">
               {strengths.map((item, i) => (
                 <li key={i} className="insights-item insights-item--strength">
@@ -43,9 +46,7 @@ function InsightsPanel({ insights, partialSkills = [], extraSkills = [] }) {
 
         {weaknesses.length > 0 && (
           <div className="insights-section insights-section--weaknesses">
-            <h3 className="insights-section-title">
-              <span className="insights-icon">⚠️</span> Pontos de Atenção
-            </h3>
+            <h4 className="insights-section-title">Pontos de Atenção</h4>
             <ul className="insights-list">
               {weaknesses.map((item, i) => (
                 <li key={i} className="insights-item insights-item--weakness">
@@ -61,9 +62,7 @@ function InsightsPanel({ insights, partialSkills = [], extraSkills = [] }) {
       {/* Skills parcialmente atendidas */}
       {partialSkills.length > 0 && (
         <div className="insights-section insights-section--partial-detail">
-          <h3 className="insights-section-title">
-            <span className="insights-icon">◑</span> Skills Parcialmente Atendidas
-          </h3>
+          <h4 className="insights-section-title">Skills Parcialmente Atendidas</h4>
           <p className="insights-hint">
             Você tem essas skills, mas em nível inferior ao exigido pela vaga.
           </p>
@@ -80,9 +79,7 @@ function InsightsPanel({ insights, partialSkills = [], extraSkills = [] }) {
       {/* Skills extras do currículo */}
       {extraSkills.length > 0 && (
         <div className="insights-section insights-section--extra-detail">
-          <h3 className="insights-section-title">
-            <span className="insights-icon">＋</span> Skills Extras no Currículo
-          </h3>
+          <h4 className="insights-section-title">Skills Extras no Currículo</h4>
           <p className="insights-hint">
             Você tem essas skills além do exigido — podem ser diferenciais em outras vagas.
           </p>
@@ -99,9 +96,7 @@ function InsightsPanel({ insights, partialSkills = [], extraSkills = [] }) {
       {/* Próximos passos */}
       {priority_actions.length > 0 && (
         <div className="insights-section insights-section--actions">
-          <h3 className="insights-section-title">
-            <span className="insights-icon">🎯</span> Próximos Passos
-          </h3>
+          <h4 className="insights-section-title">Próximos Passos</h4>
           <ol className="insights-actions-list">
             {priority_actions.map((action, i) => (
               <li key={i} className="insights-action-item">
@@ -113,7 +108,7 @@ function InsightsPanel({ insights, partialSkills = [], extraSkills = [] }) {
         </div>
       )}
 
-    </div>
+    </section>
   );
 }
 

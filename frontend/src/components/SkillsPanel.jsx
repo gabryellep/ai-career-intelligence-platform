@@ -32,17 +32,44 @@ function SkillsPanel({
 }) {
   const hasPartial = partialSkills.length > 0;
   const hasExtra   = extraSkills.length > 0;
+  const totalRelevant = matchedSkills.length + missingSkills.length + partialSkills.length;
+  const safeTotal = Math.max(1, totalRelevant);
+  const bars = [
+    { label: 'Atendidas', value: matchedSkills.length, className: 'skills-meter-fill--matched' },
+    { label: 'Faltantes', value: missingSkills.length, className: 'skills-meter-fill--missing' },
+    { label: 'Parciais', value: partialSkills.length, className: 'skills-meter-fill--partial' },
+  ];
 
   return (
-    <div className="skills-card">
-      <h2 className="skills-card-title">Skills</h2>
+    <section className="skills-card">
+      <div className="panel-heading">
+        <div>
+          <p className="section-eyebrow">Mapa de skills</p>
+          <h3>O que a vaga pede vs. o que aparece no currículo</h3>
+        </div>
+        <span className="panel-count">{totalRelevant} requisitos identificados</span>
+      </div>
 
-      {/* Grade principal: encontradas + faltantes */}
+      <div className="skills-meter" aria-label="Distribuição de skills por status">
+        {bars.map((bar) => (
+          <div key={bar.label} className="skills-meter-row">
+            <span>{bar.label}</span>
+            <div className="skills-meter-track">
+              <div
+                className={`skills-meter-fill ${bar.className}`}
+                style={{ width: `${Math.round((bar.value / safeTotal) * 100)}%` }}
+              />
+            </div>
+            <strong>{bar.value}</strong>
+          </div>
+        ))}
+      </div>
+
       <div className="skills-panel-container">
 
         <div className="skills-panel skills-panel--matched">
           <h3 className="skills-panel-title skills-panel-title--matched">
-            ✓ Encontradas
+            Encontradas
           </h3>
           <SkillBadgeList
             skills={matchedSkills}
@@ -54,7 +81,7 @@ function SkillsPanel({
 
         <div className="skills-panel skills-panel--missing">
           <h3 className="skills-panel-title skills-panel-title--missing">
-            ✗ Faltantes
+            Faltantes
           </h3>
           <SkillBadgeList
             skills={missingSkills}
@@ -66,14 +93,13 @@ function SkillsPanel({
 
       </div>
 
-      {/* Linha secundária: parciais + extras (apenas se existirem) */}
       {(hasPartial || hasExtra) && (
         <div className="skills-panel-container skills-panel-container--secondary">
 
           {hasPartial && (
             <div className="skills-panel skills-panel--partial">
               <h3 className="skills-panel-title skills-panel-title--partial">
-                ◑ Parcialmente Atendidas
+                Parcialmente Atendidas
               </h3>
               <p className="skills-panel-hint">
                 Skill exigida, mas atendida em nível inferior ao solicitado.
@@ -90,7 +116,7 @@ function SkillsPanel({
           {hasExtra && (
             <div className="skills-panel skills-panel--extra">
               <h3 className="skills-panel-title skills-panel-title--extra">
-                ＋ Extras no Currículo
+                Extras no Currículo
               </h3>
               <p className="skills-panel-hint">
                 Skills que você tem além do exigido pela vaga.
@@ -107,7 +133,7 @@ function SkillsPanel({
         </div>
       )}
 
-    </div>
+    </section>
   );
 }
 

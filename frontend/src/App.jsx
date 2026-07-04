@@ -63,19 +63,29 @@ function App() {
     }
   }
 
+  const resultStats = result
+    ? {
+        matched: result.matched_skills?.length || 0,
+        missing: result.missing_skills?.length || 0,
+        partial: result.partial_skills?.length || 0,
+        extra: result.extra_skills?.length || 0,
+      }
+    : null;
+
   return (
-    <div className="app-container">
+    <div className="app-shell">
 
       <header className="app-header">
+        <p className="app-eyebrow">Career intelligence for tech roles</p>
         <h1 className="app-title">AI Career Intelligence Platform</h1>
         <p className="app-description">
-          Analise currículos em PDF para vagas de tecnologia, IA e engenharia
-          de software. Identifique compatibilidade, skills faltantes e
-          próximos passos.
+          Compare seu currículo com uma vaga de tecnologia, IA, dados ou
+          engenharia de software e receba um score explicável com prioridades
+          práticas.
         </p>
         <p className="app-scope-note">
-          Esta ferramenta foi projetada para vagas da área tech. Resultados
-          podem ser menos precisos para áreas fora de tecnologia.
+          Projetado para vagas tech. Resultados fora desse contexto podem ser
+          menos precisos.
         </p>
       </header>
 
@@ -102,24 +112,60 @@ function App() {
           <UploadForm onSubmit={handleAnalyze} loading={loading} />
 
           {!result && !error && !loading && (
-            <p className="initial-hint">
-              Envie um currículo e uma descrição para começar.
-            </p>
+            <section className="empty-state" aria-label="Resumo do fluxo">
+              <div>
+                <span className="empty-state-step">1</span>
+                <strong>Envie um PDF</strong>
+                <p>O arquivo é validado antes da análise.</p>
+              </div>
+              <div>
+                <span className="empty-state-step">2</span>
+                <strong>Cole a vaga</strong>
+                <p>Use a descrição completa para melhorar a extração.</p>
+              </div>
+              <div>
+                <span className="empty-state-step">3</span>
+                <strong>Revise os gaps</strong>
+                <p>Priorize skills faltantes, parciais e recomendações.</p>
+              </div>
+            </section>
+          )}
+
+          {loading && (
+            <section className="loading-card" aria-live="polite">
+              <div className="loading-spinner" aria-hidden="true" />
+              <div>
+                <strong>Analisando compatibilidade...</strong>
+                <p>Extraindo texto do PDF, identificando skills e calculando o score explicável.</p>
+              </div>
+            </section>
           )}
 
           {error && (
             <div className="error-banner" role="alert">
-              ⚠️ {error}
+              <strong>Não foi possível concluir a análise.</strong>
+              <span>{error}</span>
             </div>
           )}
 
           {result && (
             <div className="result-container" ref={resultRef}>
 
-              {/* Score de compatibilidade */}
-              <ScoreCard score={result.score} />
+              <section className="result-header" aria-label="Resumo da análise">
+                <div>
+                  <p className="section-eyebrow">Resultado da análise</p>
+                  <h2>Compatibilidade com a vaga</h2>
+                </div>
+                <div className="result-stat-strip">
+                  <span><strong>{resultStats.matched}</strong> atendidas</span>
+                  <span><strong>{resultStats.missing}</strong> faltantes</span>
+                  <span><strong>{resultStats.partial}</strong> parciais</span>
+                  <span><strong>{resultStats.extra}</strong> extras</span>
+                </div>
+              </section>
 
-              {/* Skills: encontradas, faltantes e parciais */}
+              <ScoreCard score={result.score} stats={resultStats} />
+
               <SkillsPanel
                 matchedSkills={result.matched_skills || []}
                 missingSkills={result.missing_skills || []}
@@ -127,7 +173,6 @@ function App() {
                 extraSkills={result.extra_skills || []}
               />
 
-              {/* Análise do perfil: pontos fortes, fracos e ações */}
               {result.insights && (
                 <InsightsPanel
                   insights={result.insights}
@@ -136,7 +181,6 @@ function App() {
                 />
               )}
 
-              {/* Recomendações de melhoria */}
               <Recommendations recommendations={result.recommendations || []} />
 
             </div>

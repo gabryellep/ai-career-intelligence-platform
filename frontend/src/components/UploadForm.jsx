@@ -17,6 +17,9 @@ function UploadForm({ onSubmit, loading }) {
   const [consentGiven, setConsentGiven] = useState(false);
   const [error, setError] = useState('');
 
+  const jobLength = jobDescription.trim().length;
+  const canSubmit = Boolean(file) && jobLength >= MIN_JOB_LENGTH && consentGiven && !loading;
+
   function handleFileChange(e) {
     const selected = e.target.files[0] || null;
     setFile(selected);
@@ -65,31 +68,38 @@ function UploadForm({ onSubmit, loading }) {
 
   return (
     <form onSubmit={handleSubmit} className="upload-form" noValidate>
-
-      {/* Campo de upload de arquivo PDF */}
-      <div className="form-group">
-        <label htmlFor="resume-file" className="form-label">
-          Currículo (PDF)
-        </label>
-        <input
-          id="resume-file"
-          type="file"
-          accept=".pdf"
-          onChange={handleFileChange}
-          className="file-input"
-          disabled={loading}
-        />
-        {file && (
-          <span className="file-name">
-            📄 {file.name}
-          </span>
-        )}
+      <div className="form-header">
+        <div>
+          <p className="section-eyebrow">Nova análise</p>
+          <h2>Currículo + descrição da vaga</h2>
+        </div>
+        <span className="form-badge">PDF até 5 MB</span>
       </div>
 
-      {/* Textarea para descrição da vaga */}
-      <div className="form-group">
+      <div className="form-grid">
+        <div className="form-group upload-group">
+        <label htmlFor="resume-file" className="form-label">
+          Currículo
+        </label>
+          <label className={`file-dropzone ${file ? 'file-dropzone--selected' : ''}`} htmlFor="resume-file">
+            <span className="file-dropzone-title">{file ? file.name : 'Selecionar PDF'}</span>
+            <span className="file-dropzone-subtitle">
+              {file ? `${(file.size / 1024 / 1024).toFixed(2)} MB` : 'Arquivo em PDF, máximo 5 MB'}
+            </span>
+          </label>
+          <input
+            id="resume-file"
+            type="file"
+            accept=".pdf"
+            onChange={handleFileChange}
+            className="file-input"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="form-group job-group">
         <label htmlFor="job-description" className="form-label">
-          Descrição da Vaga
+          Descrição da vaga
         </label>
         <textarea
           id="job-description"
@@ -101,9 +111,13 @@ function UploadForm({ onSubmit, loading }) {
           disabled={loading}
           aria-label="Descrição da vaga"
         />
+          <div className="textarea-footer">
+            <span>{jobLength} caracteres</span>
+            <span>{jobLength >= MIN_JOB_LENGTH ? 'Pronto para análise' : 'Mínimo de 10 caracteres'}</span>
+          </div>
+        </div>
       </div>
 
-      {/* Consentimento de tratamento de dados (LGPD básica) */}
       <div className="form-group consent-group">
         <label className="consent-label" htmlFor="consent-checkbox">
           <input
@@ -137,7 +151,7 @@ function UploadForm({ onSubmit, loading }) {
       <button
         type="submit"
         className="analyze-button"
-        disabled={loading || !consentGiven}
+        disabled={!canSubmit}
         aria-busy={loading}
       >
         {loading ? 'Analisando...' : 'Analisar Currículo'}
