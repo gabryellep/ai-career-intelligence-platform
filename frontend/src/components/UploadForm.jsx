@@ -115,8 +115,10 @@ function UploadForm({ onSubmit, loading }) {
           />
           <span>
             Autorizo o processamento temporário do meu currículo para gerar
-            esta análise. O arquivo é usado apenas durante esta requisição e
-            não é salvo, nem gera histórico nesta versão. Saiba mais em{' '}
+            esta análise. O PDF e o texto bruto não são salvos. Quando o banco
+            está configurado, a aplicação pode armazenar apenas metadados e
+            resultados estruturados da análise. Histórico e analytics ficam
+            desativados na demo pública. Saiba mais em{' '}
             <a href="https://github.com/gabryellep/ai-resume-analyzer/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">
               PRIVACY.md
             </a>.

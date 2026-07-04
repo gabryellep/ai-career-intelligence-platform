@@ -16,7 +16,7 @@ Este checklist cobre o deploy público atual (backend no Render, frontend na Ver
 | Variável | Valor em produção | Observação |
 |---|---|---|
 | `ENVIRONMENT` | `production` | Faz `get_cors_allowed_origins()` restringir a origem a `FRONTEND_ORIGIN`, em vez de `"*"` (só em `development`). |
-| `FRONTEND_ORIGIN` | URL da Vercel (ex.: `https://ai-resume-analyzer-app-pi.vercel.app`) | Único valor aceito pelo CORS quando `ENVIRONMENT != development`. Atualizar se o domínio do frontend mudar. |
+| `FRONTEND_ORIGIN` | `https://ai-career-intelligence-platform-beta.vercel.app` | Único valor aceito pelo CORS quando `ENVIRONMENT != development`. O domínio antigo da Vercel (`https://ai-resume-analyzer-app-pi.vercel.app`) é legado e não deve ser usado em novos deploys. |
 | `DATABASE_URL` | string de conexão do PostgreSQL gerenciado | Usada por `app/db/session.py` e por `alembic upgrade head`. |
 | `ENABLE_HISTORY_API` | `false` | Não alterar sem revisitar a decisão acima. |
 | `ENABLE_ANALYTICS_API` | `false` | Não alterar sem revisitar a decisão acima. |

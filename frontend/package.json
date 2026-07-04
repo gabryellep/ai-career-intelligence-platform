@@ -1,7 +1,7 @@
 {
-  "name": "ai-resume-analyzer",
+  "name": "ai-career-intelligence-platform",
   "version": "1.0.0",
-  "description": "Frontend do AI Resume Analyzer — analisa compatibilidade entre currículo e vaga",
+  "description": "Frontend do AI Career Intelligence Platform — analisa compatibilidade entre currículo e vaga para tecnologia, IA, dados e engenharia de software",
   "type": "module",
   "scripts": {
     "dev": "vite",

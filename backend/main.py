@@ -1,5 +1,5 @@
 """
-main.py — Entrypoint da aplicação AI Resume Analyzer.
+main.py — Entrypoint da aplicação AI Career Intelligence Platform.
 
 Inicializa o FastAPI, configura CORS e registra as rotas legadas
 (/health, /analyze) e versionadas (/api/v1/health, /api/v1/analyze).
@@ -18,7 +18,7 @@ from app.core.config import get_cors_allowed_origins
 
 # Inicializa a aplicação FastAPI
 app = FastAPI(
-    title="AI Resume Analyzer",
+    title="AI Career Intelligence Platform",
     description="Analisa a compatibilidade entre um currículo e uma descrição de vaga.",
     version="1.0.0",
 )
