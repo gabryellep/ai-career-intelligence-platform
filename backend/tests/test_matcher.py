@@ -8,12 +8,12 @@ Testa analyze_skill_match e calculate_weighted_score com:
 - Score ponderado
 """
 
-from app.matcher import analyze_skill_match, calculate_weighted_score
-
+from app.engines.deterministic.matcher import analyze_skill_match, calculate_weighted_score
 
 # ---------------------------------------------------------------------------
 # Testes de matching simples
 # ---------------------------------------------------------------------------
+
 
 def test_simple_match_python():
     """Skill presente no currículo e na vaga deve estar em matched."""
@@ -65,16 +65,14 @@ def test_empty_resume_skills():
 def test_no_duplicates_in_results():
     """Nenhuma skill deve aparecer em mais de uma categoria."""
     result = analyze_skill_match(["python", "docker"], ["python", "aws"])
-    all_skills = (
-        result["matched"] + result["partial"] +
-        result["missing"] + result["extra"]
-    )
+    all_skills = result["matched"] + result["partial"] + result["missing"] + result["extra"]
     assert len(all_skills) == len(set(all_skills))
 
 
 # ---------------------------------------------------------------------------
 # Testes de idioma — nível canônico (gerado por skills.py)
 # ---------------------------------------------------------------------------
+
 
 def test_english_advanced_matched_by_advanced():
     """english_advanced exigido e currículo tem english_advanced → matched."""
@@ -132,6 +130,7 @@ def test_english_basic_matched_by_basic():
 # Testes de idioma — variações em português
 # ---------------------------------------------------------------------------
 
+
 def test_ingles_avancado_matched_by_ingles_avancado():
     """'inglês avançado' exigido e currículo tem 'inglês avançado' → matched."""
     result = analyze_skill_match(["inglês avançado"], ["inglês avançado"])
@@ -163,6 +162,7 @@ def test_ingles_basico_matched_by_ingles_avancado():
 # ---------------------------------------------------------------------------
 # Testes de score ponderado
 # ---------------------------------------------------------------------------
+
 
 def test_weighted_score_all_matched():
     """Score deve ser 100 quando todas as skills estão matched."""

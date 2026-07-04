@@ -14,6 +14,7 @@ const MIN_JOB_LENGTH = 10; // alinhado com o backend
 function UploadForm({ onSubmit, loading }) {
   const [file, setFile] = useState(null);
   const [jobDescription, setJobDescription] = useState('');
+  const [consentGiven, setConsentGiven] = useState(false);
   const [error, setError] = useState('');
 
   function handleFileChange(e) {
@@ -24,6 +25,11 @@ function UploadForm({ onSubmit, loading }) {
 
   function handleJobDescriptionChange(e) {
     setJobDescription(e.target.value);
+    setError('');
+  }
+
+  function handleConsentChange(e) {
+    setConsentGiven(e.target.checked);
     setError('');
   }
 
@@ -44,6 +50,12 @@ function UploadForm({ onSubmit, loading }) {
     // Validação: descrição mínima de 10 caracteres
     if (jobDescription.trim().length < MIN_JOB_LENGTH) {
       setError('Descreva melhor a vaga (mínimo de 10 caracteres).');
+      return;
+    }
+
+    // Validação: consentimento obrigatório antes do envio
+    if (!consentGiven) {
+      setError('Marque a caixa de consentimento para continuar.');
       return;
     }
 
@@ -91,6 +103,27 @@ function UploadForm({ onSubmit, loading }) {
         />
       </div>
 
+      {/* Consentimento de tratamento de dados (LGPD básica) */}
+      <div className="form-group consent-group">
+        <label className="consent-label" htmlFor="consent-checkbox">
+          <input
+            id="consent-checkbox"
+            type="checkbox"
+            checked={consentGiven}
+            onChange={handleConsentChange}
+            disabled={loading}
+          />
+          <span>
+            Autorizo o processamento temporário do meu currículo para gerar
+            esta análise. O arquivo é usado apenas durante esta requisição e
+            não é salvo, nem gera histórico nesta versão. Saiba mais em{' '}
+            <a href="https://github.com/gabryellep/ai-resume-analyzer/blob/main/PRIVACY.md" target="_blank" rel="noopener noreferrer">
+              PRIVACY.md
+            </a>.
+          </span>
+        </label>
+      </div>
+
       {/* Mensagem de erro de validação */}
       {error && (
         <p className="validation-error" role="alert">
@@ -102,7 +135,7 @@ function UploadForm({ onSubmit, loading }) {
       <button
         type="submit"
         className="analyze-button"
-        disabled={loading}
+        disabled={loading || !consentGiven}
         aria-busy={loading}
       >
         {loading ? 'Analisando...' : 'Analisar Currículo'}

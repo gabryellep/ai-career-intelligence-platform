@@ -12,7 +12,7 @@ de arquivos externos.
 
 import fitz  # PyMuPDF
 import pytest
-from app.parser import extract_text
+from app.engines.deterministic.parser import extract_text
 
 
 def create_pdf_with_text(text: str) -> bytes:
@@ -43,6 +43,7 @@ def create_empty_pdf() -> bytes:
 # ---------------------------------------------------------------------------
 # Testes
 # ---------------------------------------------------------------------------
+
 
 def test_extract_text_from_valid_pdf():
     """PDF válido com texto deve retornar o texto extraído."""

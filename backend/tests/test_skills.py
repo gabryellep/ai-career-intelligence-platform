@@ -11,12 +11,12 @@ Testa a função extract_skills com os seguintes cenários:
 7. Texto vazio ou apenas espaços
 """
 
-from app.skills import extract_skills, SKILLS_DICT
-
+from app.engines.deterministic.skills import extract_skills, SKILLS_DICT
 
 # ---------------------------------------------------------------------------
 # Testes de comportamento básico
 # ---------------------------------------------------------------------------
+
 
 def test_extract_skills_case_insensitive():
     """A extração deve funcionar independente de maiúsculas/minúsculas."""
@@ -64,6 +64,7 @@ def test_extract_skills_returns_sorted_list():
 # Testes de skills compostas
 # ---------------------------------------------------------------------------
 
+
 def test_extract_composite_skill_spring_boot():
     """Skills compostas como 'spring boot' devem ser detectadas corretamente."""
     result = extract_skills("Tenho experiência com Spring Boot e Java.")
@@ -86,6 +87,7 @@ def test_extract_composite_skill_github_actions():
 # ---------------------------------------------------------------------------
 # Testes de word boundaries — evitar falsos positivos
 # ---------------------------------------------------------------------------
+
 
 def test_no_false_positive_go_in_google():
     """'go' não deve ser detectado dentro de 'google'."""
@@ -112,8 +114,110 @@ def test_no_false_positive_r_in_docker():
 
 
 # ---------------------------------------------------------------------------
+# Testes de skills curtas/ambíguas ("go", "c", "r") — exigem contexto seguro,
+# nunca substring simples nem ocorrência isolada da palavra/letra.
+# ---------------------------------------------------------------------------
+
+
+def test_go_not_detected_in_django():
+    """'go' não deve ser detectado em texto sobre Django."""
+    result = extract_skills("Sou desenvolvedor Django com experiência em APIs REST.")
+    assert "go" not in result
+
+
+def test_go_not_detected_in_google():
+    """'go' não deve ser detectado em texto sobre Google."""
+    result = extract_skills("Tenho experiência com Google Cloud Platform.")
+    assert "go" not in result
+
+
+def test_go_not_detected_in_goiania():
+    """'go' não deve ser detectado em 'Goiânia' (cidade)."""
+    result = extract_skills("Moro em Goiânia e trabalho remotamente.")
+    assert "go" not in result
+
+
+def test_go_not_detected_in_cargo():
+    """'go' não deve ser detectado em 'cargo'."""
+    result = extract_skills("Trabalhei no transporte de cargo por dois anos.")
+    assert "go" not in result
+
+
+def test_go_not_detected_in_goals():
+    """'go' não deve ser detectado em 'goals' (palavra comum do inglês)."""
+    result = extract_skills("I achieved all my professional goals this year.")
+    assert "go" not in result
+
+
+def test_go_not_detected_as_common_word():
+    """
+    'go' é uma palavra comum do inglês (ex.: "let's go", "go to market") —
+    não pode ser detectada apenas por ocorrência isolada da palavra, mesmo
+    respeitando word boundaries.
+    """
+    assert "go" not in extract_skills("Let's go to market with this strategy.")
+    assert "go" not in extract_skills("Go, team! We can do this.")
+    assert "go" not in extract_skills("I need to go now, see you later.")
+
+
+def test_golang_detects_go():
+    """'golang' deve detectar a skill 'go'."""
+    result = extract_skills("Tenho experiência com Golang em microsserviços.")
+    assert "go" in result
+
+
+def test_go_language_detects_go():
+    """'Go language' (contexto seguro) deve detectar a skill 'go'."""
+    result = extract_skills("I have experience with Go language for backend services.")
+    assert "go" in result
+
+
+def test_go_programming_language_detects_go():
+    """'Go programming language' deve detectar a skill 'go'."""
+    result = extract_skills("Expert in Go programming language and concurrency.")
+    assert "go" in result
+
+
+def test_c_not_detected_in_common_words():
+    """'c' não pode ser detectado por qualquer ocorrência da letra 'c' em palavras comuns."""
+    result = extract_skills("Category, calculate, connect, cargo, cache, cloud.")
+    assert "c" not in result
+
+
+def test_c_programming_detects_c():
+    """'C programming' (contexto seguro) deve detectar a skill 'c'."""
+    result = extract_skills("Tenho experiência com C programming em sistemas embarcados.")
+    assert "c" in result
+
+
+def test_programming_in_c_detects_c():
+    """'programming in C' (contexto seguro) deve detectar a skill 'c'."""
+    result = extract_skills("Five years of programming in C for embedded systems.")
+    assert "c" in result
+
+
+def test_r_not_detected_in_common_words():
+    """'r' não pode ser detectado por qualquer ocorrência da letra 'r' em palavras comuns."""
+    result = extract_skills("Regular, error, super, container, order, remote.")
+    assert "r" not in result
+
+
+def test_r_language_detects_r():
+    """'R language' (contexto seguro) deve detectar a skill 'r'."""
+    result = extract_skills("I use R language for statistical analysis and data science.")
+    assert "r" in result
+
+
+def test_r_programming_detects_r():
+    """'R programming' (contexto seguro) deve detectar a skill 'r'."""
+    result = extract_skills("Experience with R programming for data visualization.")
+    assert "r" in result
+
+
+# ---------------------------------------------------------------------------
 # Testes de skills com símbolos
 # ---------------------------------------------------------------------------
+
 
 def test_extract_skill_with_plus_plus():
     """'c++' deve ser detectado corretamente."""
@@ -143,6 +247,7 @@ def test_extract_skill_ci_cd():
 # Teste de integridade do dicionário
 # ---------------------------------------------------------------------------
 
+
 def test_skills_dict_has_minimum_100_terms():
     """O SKILLS_DICT deve conter no mínimo 100 termos."""
     assert len(SKILLS_DICT) >= 100
@@ -162,6 +267,7 @@ def test_skills_dict_all_lowercase():
 # ---------------------------------------------------------------------------
 # Testes de aliases e sinônimos
 # ---------------------------------------------------------------------------
+
 
 def test_alias_amazon_web_services_returns_aws():
     """'amazon web services' deve retornar 'aws'."""
@@ -226,6 +332,7 @@ def test_alias_sklearn_returns_scikit_learn():
 # ---------------------------------------------------------------------------
 # Testes de detecção de idioma com nível
 # ---------------------------------------------------------------------------
+
 
 def test_ingles_sem_nivel_retorna_english_basic():
     """'inglês' sem nível deve retornar 'english_basic'."""

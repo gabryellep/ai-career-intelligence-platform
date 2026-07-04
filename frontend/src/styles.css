@@ -1,5 +1,5 @@
 /* ============================================================
-   styles.css — Estilos globais do AI Resume Analyzer
+   styles.css — Estilos globais do AI Career Intelligence Platform
    ============================================================ */
 
 /* Reset básico */
@@ -61,6 +61,14 @@ body {
   max-width: 560px;
   margin: 0 auto;
   line-height: 1.7;
+}
+
+.app-scope-note {
+  font-size: 0.85rem;
+  color: #a0aec0;
+  max-width: 560px;
+  margin: 0.75rem auto 0;
+  line-height: 1.5;
 }
 
 /* ============================================================
@@ -148,6 +156,40 @@ body {
 
 .job-textarea::placeholder {
   color: #a0aec0;
+}
+
+/* ============================================================
+   Consentimento de tratamento de dados (LGPD básica)
+   ============================================================ */
+
+.consent-group {
+  padding: 0.75rem 0.9rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: #4a5568;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.consent-label input[type="checkbox"] {
+  margin-top: 0.2rem;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.consent-label a {
+  color: #667eea;
+  font-weight: 600;
 }
 
 /* ============================================================
@@ -688,5 +730,420 @@ body {
 
   .recommendations-icon {
     display: none;
+  }
+}
+
+/* ============================================================
+   Navegação principal (SPEC 0007)
+   ============================================================ */
+
+.app-nav {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.app-nav-button {
+  padding: 0.6rem 1.25rem;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4a5568;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.app-nav-button:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.app-nav-button--active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: #ffffff;
+}
+
+/* ============================================================
+   Dashboard e Histórico (SPEC 0007)
+   ============================================================ */
+
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dashboard-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #a0aec0;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.dashboard-notice-icon {
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.dashboard-notice-text {
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.5;
+}
+
+.dashboard-loading-text,
+.dashboard-empty-text {
+  font-size: 0.9rem;
+  color: #a0aec0;
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+.dashboard-error-text {
+  font-size: 0.9rem;
+  color: #c53030;
+  padding: 0.5rem 0;
+}
+
+.dashboard-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dashboard-card--wide {
+  grid-column: span 4;
+}
+
+.dashboard-card--empty {
+  grid-column: span 4;
+}
+
+.dashboard-card-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.dashboard-card-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1a202c;
+}
+
+.dashboard-card-value--good {
+  color: #38a169;
+}
+
+.dashboard-card-value--bad {
+  color: #e53e3e;
+}
+
+.dashboard-missing-skills-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+
+.dashboard-missing-skill-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dashboard-missing-skill-count {
+  font-size: 0.8rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.dashboard-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+.dashboard-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.dashboard-panel-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 1.25rem;
+}
+
+.dashboard-panel-header .dashboard-panel-title {
+  margin-bottom: 0;
+}
+
+.dashboard-select {
+  padding: 0.45rem 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #4a5568;
+  background: #f7fafc;
+  cursor: pointer;
+}
+
+.dashboard-close-button {
+  padding: 0.4rem 0.9rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+.dashboard-close-button:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+/* Ranking de skills — barras horizontais em CSS puro */
+
+.skills-ranking-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skills-ranking-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 2.5rem;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.skills-ranking-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skills-ranking-bar-track {
+  height: 10px;
+  background: #edf2f7;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.skills-ranking-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.skills-ranking-count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-align: right;
+}
+
+/* Evolução de score — SVG simples, sem biblioteca de gráficos */
+
+.score-timeline-svg {
+  width: 100%;
+  height: 160px;
+  display: block;
+}
+
+.score-timeline-line {
+  fill: none;
+  stroke: #667eea;
+  stroke-width: 2;
+}
+
+.score-timeline-dot {
+  fill: #764ba2;
+}
+
+.score-timeline-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: #718096;
+}
+
+.score-timeline-legend-item {
+  display: flex;
+  gap: 0.3rem;
+  background: #f7fafc;
+  border-radius: 6px;
+  padding: 0.25rem 0.55rem;
+}
+
+.score-timeline-legend-date {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+/* Lista de análises */
+
+.analyses-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.analyses-list-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.analyses-list-row:hover {
+  border-color: #667eea;
+  background: #ebf4ff;
+}
+
+.analyses-list-row--selected {
+  border-color: #667eea;
+  background: #ebf4ff;
+}
+
+.analyses-list-score {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.analyses-list-skills {
+  flex: 1;
+  font-size: 0.82rem;
+  color: #4a5568;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.analyses-list-date {
+  flex-shrink: 0;
+  font-size: 0.78rem;
+  color: #a0aec0;
+}
+
+.dashboard-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.dashboard-pagination-button {
+  padding: 0.5rem 1.1rem;
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+}
+
+.dashboard-pagination-button:hover:not(:disabled) {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.dashboard-pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dashboard-pagination-info {
+  font-size: 0.82rem;
+  color: #718096;
+}
+
+.analysis-detail-panel {
+  margin-top: 1.5rem;
+  border-top: 2px solid #e2e8f0;
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .dashboard-cards-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboard-card--wide,
+  .dashboard-card--empty {
+    grid-column: span 2;
+  }
+
+  .skills-ranking-row {
+    grid-template-columns: 80px 1fr 2rem;
+  }
+
+  .analyses-list-row {
+    flex-wrap: wrap;
+  }
+
+  .analyses-list-skills {
+    white-space: normal;
+    order: 3;
+    width: 100%;
   }
 }

@@ -18,27 +18,46 @@ MAX_SKILL_RECOMMENDATIONS = 8
 
 # Skills de idioma canônicas (geradas por skills.py)
 _LANGUAGE_SKILLS = {
-    "english_basic", "english_intermediate", "english_advanced",
-    "espanhol", "frances", "alemao", "mandarin", "japones",
+    "english_basic",
+    "english_intermediate",
+    "english_advanced",
+    "espanhol",
+    "frances",
+    "alemao",
+    "mandarin",
+    "japones",
 }
 
 # Skills de cloud e DevOps — recebem sugestão de projeto de deploy/automação
 _CLOUD_DEVOPS_SKILLS = {
-    "aws", "azure", "gcp", "docker", "kubernetes", "terraform", "ansible",
-    "jenkins", "github actions", "gitlab ci", "circleci", "ci/cd",
-    "heroku", "vercel", "netlify", "cloudflare",
+    "aws",
+    "azure",
+    "gcp",
+    "docker",
+    "kubernetes",
+    "terraform",
+    "ansible",
+    "jenkins",
+    "github actions",
+    "gitlab ci",
+    "circleci",
+    "ci/cd",
+    "heroku",
+    "vercel",
+    "netlify",
+    "cloudflare",
 }
 
 # Mapeamento de nome canônico de idioma para nome legível
 _LANGUAGE_DISPLAY = {
-    "english_basic":        "Inglês (básico)",
+    "english_basic": "Inglês (básico)",
     "english_intermediate": "Inglês (intermediário)",
-    "english_advanced":     "Inglês (avançado)",
-    "espanhol":             "Espanhol",
-    "frances":              "Francês",
-    "alemao":               "Alemão",
-    "mandarin":             "Mandarim",
-    "japones":              "Japonês",
+    "english_advanced": "Inglês (avançado)",
+    "espanhol": "Espanhol",
+    "frances": "Francês",
+    "alemao": "Alemão",
+    "mandarin": "Mandarim",
+    "japones": "Japonês",
 }
 
 
@@ -105,9 +124,7 @@ def generate_recommendations(
 
     # Caso especial: sem gaps
     if not missing_skills and not partial_skills:
-        recommendations.append(
-            "Seu currículo já cobre todas as skills identificadas na vaga. Parabéns!"
-        )
+        recommendations.append("Seu currículo já cobre todas as skills identificadas na vaga. Parabéns!")
         return recommendations
 
     # Recomendações para skills faltantes (até 6 para deixar espaço para parciais e score)

@@ -1,0 +1,22 @@
+# Dependências de desenvolvimento e CI — AI Resume Analyzer
+# Não instaladas na imagem Docker de produção (ver backend/Dockerfile).
+
+-r requirements.txt
+
+# Lint e formatação
+ruff==0.15.20
+black==26.5.1
+
+# Testes e cobertura — pytest não tem uso em runtime de produção (tests/ é
+# excluído da imagem Docker via .dockerignore), por isso fica só aqui.
+pytest==8.2.0
+pytest-cov==7.1.0
+
+# Matching semântico via embeddings (SPEC 0011) — opcional, atrás de
+# ENABLE_SEMANTIC_MATCHING (false por padrão). Fica só aqui, nunca em
+# requirements.txt, porque traz torch como dependência transitiva
+# (centenas de MB) — não deve entrar na imagem de produção (ver Dockerfile).
+# Os testes da suíte usam mock/stub do serviço de embeddings e não baixam
+# o modelo real, então esta dependência não é necessária para rodar
+# `pytest tests/` com sucesso — apenas para uso real local/dev da flag.
+sentence-transformers==3.0.1

@@ -11,12 +11,12 @@ Testa a função calculate_score com os seguintes cenários:
 7. Tipos de retorno corretos
 """
 
-from app.scorer import calculate_score
-
+from app.engines.deterministic.scorer import calculate_score
 
 # ---------------------------------------------------------------------------
 # Testes de score
 # ---------------------------------------------------------------------------
+
 
 def test_score_100_percent():
     """Currículo com todas as skills da vaga deve retornar score 100."""
@@ -89,6 +89,7 @@ def test_score_with_both_empty():
 # Testes de invariantes
 # ---------------------------------------------------------------------------
 
+
 def test_score_is_between_0_and_100():
     """O score deve sempre estar entre 0 e 100, inclusive."""
     casos = [
@@ -127,6 +128,7 @@ def test_matched_and_missing_are_disjoint():
 # Testes de tipos de retorno
 # ---------------------------------------------------------------------------
 
+
 def test_return_types():
     """O retorno deve ser uma tupla (int, list, list)."""
     result = calculate_score(["python"], ["python", "docker"])
@@ -152,6 +154,7 @@ def test_matched_and_missing_are_sorted():
 # Testes de casos com skills extras no currículo
 # ---------------------------------------------------------------------------
 
+
 def test_extra_resume_skills_do_not_affect_score():
     """Skills extras no currículo que não estão na vaga não devem afetar o score."""
     resume = ["python", "docker", "java", "ruby", "perl"]  # java, ruby, perl são extras
@@ -167,6 +170,7 @@ def test_extra_resume_skills_do_not_affect_score():
 # ---------------------------------------------------------------------------
 # Testes complementares
 # ---------------------------------------------------------------------------
+
 
 def test_duplicate_resume_skills_do_not_affect_score():
     """Duplicatas em resume_skills não devem afetar o score nem os resultados."""

@@ -37,7 +37,6 @@ def extract_text(pdf_bytes: bytes) -> str:
                 if page_text.strip():
                     pages_text.append(page_text)
 
-
         # Junta o texto de todas as páginas
         return "\n".join(pages_text)
 

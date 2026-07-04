@@ -1,16 +1,20 @@
 """
 main.py — Entrypoint da aplicação AI Resume Analyzer.
 
-Inicializa o FastAPI, configura CORS e registra as rotas.
+Inicializa o FastAPI, configura CORS e registra as rotas legadas
+(/health, /analyze) e versionadas (/api/v1/health, /api/v1/analyze).
+
+Toda a lógica de validação de upload (SPEC 0008) e de orquestração da
+análise vive em app/services e app/engines — este arquivo só faz o
+bootstrap da aplicação e o registro das rotas.
 """
 
-import os
-from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
-from app.analyzer import analyze
-from app.schemas import AnalyzeResponse
+from app.api.v1.router import router as api_v1_router
+from app.api.v1.routes import analyze, health
+from app.core.config import get_cors_allowed_origins
 
 # Inicializa a aplicação FastAPI
 app = FastAPI(
@@ -24,97 +28,23 @@ app = FastAPI(
 # Em desenvolvimento: permite qualquer origem (facilita uso com Vite dev server)
 # Em produção: restringir ao domínio do frontend via variável FRONTEND_ORIGIN
 # ---------------------------------------------------------------------------
-ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
-FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
-
-if ENVIRONMENT == "development":
-    allowed_origins = ["*"]
-else:
-    allowed_origins = [FRONTEND_ORIGIN]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=get_cors_allowed_origins(),
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# ---------------------------------------------------------------------------
+# Rotas legadas (sem prefixo) — preservam /health e /analyze.
+# Reaproveitam exatamente as mesmas funções registradas em /api/v1 abaixo,
+# sem nenhuma lógica duplicada.
+# ---------------------------------------------------------------------------
+app.include_router(health.router)
+app.include_router(analyze.router)
 
 # ---------------------------------------------------------------------------
-# Rotas
+# Rotas versionadas — /api/v1/health e /api/v1/analyze
 # ---------------------------------------------------------------------------
-
-@app.get("/health", summary="Health check")
-def health_check():
-    """
-    Verifica se o serviço está em execução.
-    Retorna {"status": "ok"} com HTTP 200.
-    """
-    return {"status": "ok"}
-
-
-@app.post("/analyze", response_model=AnalyzeResponse, summary="Analisar currículo")
-async def analyze_resume(
-    file: UploadFile = File(..., description="Arquivo PDF do currículo"),
-    job_description: str = Form(..., description="Descrição da vaga"),
-):
-    """
-    Recebe um currículo em PDF e a descrição de uma vaga.
-    Retorna score de compatibilidade, skills encontradas,
-    skills faltantes e recomendações de melhoria.
-    """
-    # ---------------------------------------------------------------------------
-    # Validação 1: tipo do arquivo — deve ser application/pdf
-    # ---------------------------------------------------------------------------
-    if file.content_type != "application/pdf":
-        raise HTTPException(
-            status_code=422,
-            detail="O arquivo enviado não é um PDF válido. Envie um arquivo com extensão .pdf.",
-        )
-
-    # ---------------------------------------------------------------------------
-    # Validação 2: comprimento da descrição da vaga (10–10.000 caracteres)
-    # ---------------------------------------------------------------------------
-    if len(job_description.strip()) < 10:
-        raise HTTPException(
-            status_code=422,
-            detail="A descrição da vaga deve ter pelo menos 10 caracteres.",
-        )
-    if len(job_description) > 10_000:
-        raise HTTPException(
-            status_code=422,
-            detail="A descrição da vaga excede o limite de 10.000 caracteres.",
-        )
-
-    # ---------------------------------------------------------------------------
-    # Lê os bytes do arquivo e valida o tamanho (≤ 5 MB)
-    # ---------------------------------------------------------------------------
-    MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB em bytes
-
-    try:
-        pdf_bytes = await file.read()
-    finally:
-        await file.close()
-
-    # Validação 3: tamanho do arquivo após leitura
-    if len(pdf_bytes) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=413,
-            detail="Arquivo excede o tamanho máximo permitido de 5 MB.",
-        )
-
-    # Delega toda a análise ao Analyzer (único orquestrador)
-    # Captura exceções inesperadas e retorna HTTP 500
-    try:
-        result = analyze(pdf_bytes, job_description)
-    except HTTPException:
-        # Re-lança HTTPExceptions conhecidas sem sobrescrever
-        raise
-    except Exception:
-        raise HTTPException(
-            status_code=500,
-            detail="Erro interno durante a análise. Tente novamente.",
-        )
-
-    return result
+app.include_router(api_v1_router)

@@ -18,31 +18,30 @@ Pode ser integrado ao analyzer.py em uma versão futura.
 # Nível numérico: quanto maior, mais avançado
 _ENGLISH_LEVEL: dict[str, int] = {
     # Canônicos (gerados por skills.py)
-    "english_basic":        1,
+    "english_basic": 1,
     "english_intermediate": 2,
-    "english_advanced":     3,
-
+    "english_advanced": 3,
     # Variações em português
-    "inglês básico":        1,
-    "ingles basico":        1,
-    "inglês básico":        1,
+    "inglês básico": 1,
+    "ingles basico": 1,
     "inglês intermediário": 2,
     "ingles intermediario": 2,
-    "inglês avançado":      3,
-    "ingles avancado":      3,
-
+    "inglês avançado": 3,
+    "ingles avancado": 3,
     # Variações em inglês
-    "basic english":        1,
+    "basic english": 1,
     "intermediate english": 2,
-    "advanced english":     3,
-    "fluent english":       3,
-    "fluente em inglês":    3,
-    "fluente em ingles":    3,
-
+    "advanced english": 3,
+    "fluent english": 3,
+    "fluente em inglês": 3,
+    "fluente em ingles": 3,
     # Níveis CEFR
-    "a1": 1, "a2": 1,
-    "b1": 2, "b2": 2,
-    "c1": 3, "c2": 3,
+    "a1": 1,
+    "a2": 1,
+    "b1": 2,
+    "b2": 2,
+    "c1": 3,
+    "c2": 3,
 }
 
 # Conjunto de todas as chaves que representam inglês (qualquer nível)
@@ -64,6 +63,7 @@ def _is_english_skill(skill: str) -> bool:
 # ---------------------------------------------------------------------------
 # Matching principal
 # ---------------------------------------------------------------------------
+
 
 def analyze_skill_match(
     resume_skills: list[str],
@@ -143,7 +143,7 @@ def analyze_skill_match(
         "matched": sorted(matched),
         "partial": sorted(partial),
         "missing": sorted(missing),
-        "extra":   extra,
+        "extra": extra,
     }
 
 
@@ -167,9 +167,9 @@ def calculate_weighted_score(match_result: dict) -> int:
         Score inteiro entre 0 e 100.
         Retorna 0 se não houver skills exigidas pela vaga.
     """
-    matched  = match_result.get("matched",  [])
-    partial  = match_result.get("partial",  [])
-    missing  = match_result.get("missing",  [])
+    matched = match_result.get("matched", [])
+    partial = match_result.get("partial", [])
+    missing = match_result.get("missing", [])
 
     total_required = len(matched) + len(partial) + len(missing)
 

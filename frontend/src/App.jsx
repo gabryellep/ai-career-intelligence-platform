@@ -1,8 +1,12 @@
 /**
- * App.jsx — Componente raiz da aplicação AI Resume Analyzer.
+ * App.jsx — Componente raiz da aplicação AI Career Intelligence Platform.
  *
  * Gerencia o estado global e orquestra todos os componentes filhos.
  * Fluxo: UploadForm → API → ScoreCard + SkillsPanel + InsightsPanel + Recommendations
+ *
+ * A partir da SPEC 0007, alterna entre duas visões via estado local
+ * (sem react-router-dom, ver decisão técnica da Spec): "Analisar" (fluxo
+ * acima, inalterado) e "Histórico e Dashboard" (DashboardPage.jsx).
  */
 
 import { useState, useRef } from 'react';
@@ -11,11 +15,13 @@ import ScoreCard from './components/ScoreCard.jsx';
 import SkillsPanel from './components/SkillsPanel.jsx';
 import Recommendations from './components/Recommendations.jsx';
 import InsightsPanel from './components/InsightsPanel.jsx';
+import DashboardPage from './components/dashboard/DashboardPage.jsx';
 import { analyzeResume } from './api.js';
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB em bytes
 
 function App() {
+  const [view, setView] = useState('analyze');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
@@ -61,60 +67,89 @@ function App() {
     <div className="app-container">
 
       <header className="app-header">
-        <h1 className="app-title">AI Resume Analyzer</h1>
+        <h1 className="app-title">AI Career Intelligence Platform</h1>
         <p className="app-description">
-          Envie seu currículo em PDF e cole a descrição de uma vaga para
-          descobrir sua compatibilidade, identificar skills faltantes e
-          receber recomendações de melhoria.
+          Analise currículos em PDF para vagas de tecnologia, IA e engenharia
+          de software. Identifique compatibilidade, skills faltantes e
+          próximos passos.
+        </p>
+        <p className="app-scope-note">
+          Esta ferramenta foi projetada para vagas da área tech. Resultados
+          podem ser menos precisos para áreas fora de tecnologia.
         </p>
       </header>
 
-      <main className="app-main">
+      <nav className="app-nav" aria-label="Navegação principal">
+        <button
+          type="button"
+          className={`app-nav-button ${view === 'analyze' ? 'app-nav-button--active' : ''}`}
+          onClick={() => setView('analyze')}
+        >
+          Analisar
+        </button>
+        <button
+          type="button"
+          className={`app-nav-button ${view === 'dashboard' ? 'app-nav-button--active' : ''}`}
+          onClick={() => setView('dashboard')}
+        >
+          Histórico e Dashboard
+        </button>
+      </nav>
 
-        <UploadForm onSubmit={handleAnalyze} loading={loading} />
+      {view === 'analyze' && (
+        <main className="app-main">
 
-        {!result && !error && !loading && (
-          <p className="initial-hint">
-            Envie um currículo e uma descrição para começar.
-          </p>
-        )}
+          <UploadForm onSubmit={handleAnalyze} loading={loading} />
 
-        {error && (
-          <div className="error-banner" role="alert">
-            ⚠️ {error}
-          </div>
-        )}
+          {!result && !error && !loading && (
+            <p className="initial-hint">
+              Envie um currículo e uma descrição para começar.
+            </p>
+          )}
 
-        {result && (
-          <div className="result-container" ref={resultRef}>
+          {error && (
+            <div className="error-banner" role="alert">
+              ⚠️ {error}
+            </div>
+          )}
 
-            {/* Score de compatibilidade */}
-            <ScoreCard score={result.score} />
+          {result && (
+            <div className="result-container" ref={resultRef}>
 
-            {/* Skills: encontradas, faltantes e parciais */}
-            <SkillsPanel
-              matchedSkills={result.matched_skills || []}
-              missingSkills={result.missing_skills || []}
-              partialSkills={result.partial_skills || []}
-              extraSkills={result.extra_skills || []}
-            />
+              {/* Score de compatibilidade */}
+              <ScoreCard score={result.score} />
 
-            {/* Análise do perfil: pontos fortes, fracos e ações */}
-            {result.insights && (
-              <InsightsPanel
-                insights={result.insights}
+              {/* Skills: encontradas, faltantes e parciais */}
+              <SkillsPanel
+                matchedSkills={result.matched_skills || []}
+                missingSkills={result.missing_skills || []}
                 partialSkills={result.partial_skills || []}
                 extraSkills={result.extra_skills || []}
               />
-            )}
 
-            {/* Recomendações de melhoria */}
-            <Recommendations recommendations={result.recommendations || []} />
+              {/* Análise do perfil: pontos fortes, fracos e ações */}
+              {result.insights && (
+                <InsightsPanel
+                  insights={result.insights}
+                  partialSkills={result.partial_skills || []}
+                  extraSkills={result.extra_skills || []}
+                />
+              )}
 
-          </div>
-        )}
+              {/* Recomendações de melhoria */}
+              <Recommendations recommendations={result.recommendations || []} />
 
-      </main>
+            </div>
+          )}
+
+        </main>
+      )}
+
+      {view === 'dashboard' && (
+        <main className="app-main">
+          <DashboardPage />
+        </main>
+      )}
 
     </div>
   );
