@@ -45,6 +45,7 @@ Metadados internos de persistência (SPEC 0004):
 import hashlib
 
 from app.core.config import ENABLE_SEMANTIC_MATCHING
+from app.engines.deterministic.career_plan import generate_career_improvement_plan
 from app.engines.deterministic.parser import extract_text
 from app.engines.deterministic.skills import extract_skills
 from app.engines.deterministic.recommender import generate_recommendations
@@ -388,6 +389,7 @@ def analyze(
             partial_skills,
             score,
         )
+        career_improvement_plan = generate_career_improvement_plan(missing_skills, partial_skills)
 
         result = {
             "score": score,
@@ -401,6 +403,9 @@ def analyze(
             "_resume_text_sha256": hashlib.sha256(resume_text.encode("utf-8")).hexdigest(),
             "_resume_text_length": len(resume_text),
         }
+
+        if career_improvement_plan is not None:
+            result["career_improvement_plan"] = career_improvement_plan
 
         if debug:
             result["resume_text_preview"] = resume_text[:500]

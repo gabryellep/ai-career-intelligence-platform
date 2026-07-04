@@ -39,7 +39,8 @@ export function getOrCreateSessionId() {
  * @param {string} jobDescription - Texto da descrição da vaga.
  * @returns {Promise<Object>} Resultado da análise com score, matched_skills,
  *                            missing_skills, partial_skills, extra_skills,
- *                            insights e recommendations.
+ *                            insights, recommendations e, quando houver gaps,
+ *                            career_improvement_plan.
  * @throws {Error} Se a requisição falhar ou o servidor retornar erro.
  */
 export async function analyzeResume(file, jobDescription) {

@@ -44,6 +44,34 @@ class SemanticMatch(BaseModel):
     )
 
 
+class CareerImprovementPlanItem(BaseModel):
+    """Um item acionavel do plano de melhoria, derivado de uma lacuna real."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    skill: str = Field(..., description="Skill faltante ou parcialmente atendida que originou o item.")
+    gap_type: str = Field(..., description="Tipo do gap: missing ou partial.")
+    focus_area: str = Field(..., description="Area tecnica principal da skill.")
+    study: str = Field(..., description="Acao de estudo recomendada.")
+    practice: str = Field(..., description="Projeto ou pratica verificavel recomendada.")
+    resume_guidance: str = Field(..., description="Orientacao honesta sobre quando mencionar no curriculo.")
+    profile_guidance: str = Field(..., description="Orientacao para GitHub/LinkedIn.")
+    resources: list[str] = Field(default_factory=list, description="Recursos confiaveis para estudo.")
+
+
+class CareerImprovementPlan(BaseModel):
+    """Plano deterministico de melhoria de carreira baseado em gaps reais."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    summary: str = Field(..., description="Resumo curto do plano.")
+    items: list[CareerImprovementPlanItem] = Field(default_factory=list)
+    honesty_note: str = Field(
+        ...,
+        description="Nota de honestidade: nao inflar curriculo nem prometer resultado de emprego.",
+    )
+
+
 class AnalyzeResponse(BaseModel):
     """
     Resposta do endpoint POST /analyze.
@@ -87,6 +115,13 @@ class AnalyzeResponse(BaseModel):
     insights: InsightsResponse = Field(
         default_factory=InsightsResponse,
         description="Insights sobre pontos fortes, fracos e ações prioritárias.",
+    )
+    career_improvement_plan: CareerImprovementPlan | None = Field(
+        default=None,
+        description=(
+            "Plano deterministico e acionavel gerado apenas a partir de missing_skills e partial_skills. "
+            "Ausente quando nao ha lacunas reais."
+        ),
     )
     semantic_score: int | None = Field(
         default=None,

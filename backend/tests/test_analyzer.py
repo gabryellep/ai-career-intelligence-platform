@@ -327,6 +327,30 @@ def test_analyze_uses_contextual_job_requirements():
     assert result["match_details"]["job_context"]["seniority"] == "senior"
 
 
+def test_analyze_includes_career_improvement_plan_for_real_gaps():
+    pdf_bytes = create_pdf_with_text("Python")
+    job = "Buscamos Python, FastAPI e Docker."
+
+    result = analyze(pdf_bytes, job)
+
+    plan = result["career_improvement_plan"]
+    plan_skills = [item["skill"] for item in plan["items"]]
+    assert plan_skills == result["missing_skills"]
+    assert "python" not in plan_skills
+    assert "somente depois" in plan["items"][0]["resume_guidance"]
+
+
+def test_analyze_omits_career_improvement_plan_without_gaps():
+    pdf_bytes = create_pdf_with_text("Python FastAPI Docker")
+    job = "Buscamos Python, FastAPI e Docker."
+
+    result = analyze(pdf_bytes, job)
+
+    assert result["missing_skills"] == []
+    assert result["partial_skills"] == []
+    assert "career_improvement_plan" not in result
+
+
 def test_analyze_with_flag_disabled_omits_semantic_fields(monkeypatch):
     """Com ENABLE_SEMANTIC_MATCHING desligada (padrão), os 3 campos semânticos não aparecem."""
     monkeypatch.setattr(analyzer_module, "ENABLE_SEMANTIC_MATCHING", False)

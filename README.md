@@ -39,6 +39,7 @@ O **score é sempre calculado por um motor determinístico e explicável** (regr
 - Score de compatibilidade explicável (0–100)
 - Skills classificadas em atendidas, faltantes, parcialmente atendidas e extras
 - Recomendações práticas e acionáveis
+- Career Improvement Plan determinístico para transformar gaps reais em estudo, prática e evidências
 - Processamento local e privacy-first (PDF nunca é persistido — ver [PRIVACY.md](PRIVACY.md))
 - Histórico e dashboard de análises (local/dev)
 - Matching semântico opcional via embeddings (local/dev)
@@ -164,7 +165,7 @@ Rodando fora do Docker, é necessário um PostgreSQL acessível via `DATABASE_UR
 }
 ```
 
-Contrato completo (incluindo campos opcionais de matching semântico e LLM) em [docs/technical-details.md](docs/technical-details.md#api-completa).
+Contrato completo (incluindo Career Improvement Plan, campos opcionais de matching semântico e LLM) em [docs/technical-details.md](docs/technical-details.md#api-completa).
 
 ---
 

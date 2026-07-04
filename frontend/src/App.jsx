@@ -15,6 +15,7 @@ import ScoreCard from './components/ScoreCard.jsx';
 import SkillsPanel from './components/SkillsPanel.jsx';
 import Recommendations from './components/Recommendations.jsx';
 import InsightsPanel from './components/InsightsPanel.jsx';
+import CareerPlan from './components/CareerPlan.jsx';
 import DashboardPage from './components/dashboard/DashboardPage.jsx';
 import { analyzeResume } from './api.js';
 
@@ -182,6 +183,7 @@ function App() {
               )}
 
               <Recommendations recommendations={result.recommendations || []} />
+              <CareerPlan plan={result.career_improvement_plan} />
 
             </div>
           )}
