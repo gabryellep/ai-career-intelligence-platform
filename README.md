@@ -110,13 +110,11 @@ flowchart LR
 
 ## Screenshots
 
-Capturas com dados sintéticos, sem currículo real ou vaga real identificável. Checklist e regras de captura em [docs/images/README.md](docs/images/README.md).
+Capturas com dados sintéticos, sem currículo real ou vaga real identificável.
 
-![Tela inicial](docs/images/home.png)
+![Demo curta do fluxo de análise](docs/images/demo.gif)
 
-![Resultado da análise](docs/images/result.png)
-
-![Demo curta](docs/images/demo.gif)
+![Resultado detalhado da análise](docs/images/result.png)
 
 ---
 
