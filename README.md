@@ -1,15 +1,18 @@
 # AI Career Intelligence Platform
 
-Plataforma para comparar currículos em PDF com vagas de tecnologia, IA, dados e engenharia de software, gerando score explicável, lacunas técnicas e recomendações práticas.
+Descubra em segundos quais skills aumentam ou bloqueiam sua aderência a uma vaga, com score explicável, gaps técnicos e plano prático de melhoria a partir do seu currículo em PDF.
 
 ---
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat&logo=fastapi&logoColor=white)
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=black)
-[![CI](https://github.com/gabryellep/ai-resume-analyzer/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gabryellep/ai-resume-analyzer/actions/workflows/ci.yml)
+[![CI](https://github.com/gabryellep/ai-career-intelligence-platform/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gabryellep/ai-career-intelligence-platform/actions/workflows/ci.yml)
+![Coverage](https://img.shields.io/badge/Coverage-92.29%25-brightgreen?style=flat)
 ![Deploy](https://img.shields.io/badge/Deploy-Render%20%2B%20Vercel-purple?style=flat)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+
+![Demo curta do fluxo de análise](docs/images/demo.gif)
 
 ---
 
@@ -19,7 +22,7 @@ Plataforma para comparar currículos em PDF com vagas de tecnologia, IA, dados e
 - **Backend/API:** https://ai-resume-analyzer-wh05.onrender.com
 - **Swagger:** https://ai-resume-analyzer-wh05.onrender.com/docs
 
-> O frontend público já usa o nome novo do produto. O backend ainda mantém o domínio técnico original no Render. Como ele roda em plano gratuito, a primeira requisição após um período de inatividade pode demorar alguns segundos.
+> O frontend público já usa o nome novo do produto. A URL do backend no Render ainda contém o nome técnico antigo do serviço (`ai-resume-analyzer-wh05`), mas atende a API atual da AI Career Intelligence Platform. Como ele roda em plano gratuito, a primeira requisição após um período de inatividade pode demorar alguns segundos.
 
 ---
 
@@ -92,12 +95,12 @@ Nenhuma dessas capacidades está incompleta — todas têm testes automatizados 
 
 ## Architecture
 
-```mermaid
-flowchart LR
-  UI[Frontend - React] --> API[Backend API - FastAPI]
-  API --> Services[Services]
-  Services --> Engines[Engines - determinístico + IA opcional]
-  Services --> DB[(PostgreSQL)]
+```text
+Frontend (React)
+  -> Backend API (FastAPI)
+      -> Services
+          -> Engines (determinístico + IA opcional)
+          -> PostgreSQL
 ```
 
 - **Frontend**: upload do currículo, exibição do resultado, histórico/dashboard.
@@ -111,8 +114,6 @@ flowchart LR
 ## Screenshots
 
 Capturas com dados sintéticos, sem currículo real ou vaga real identificável.
-
-![Demo curta do fluxo de análise](docs/images/demo.gif)
 
 ![Resultado detalhado da análise](docs/images/result.png)
 
@@ -165,7 +166,23 @@ Rodando fora do Docker, é necessário um PostgreSQL acessível via `DATABASE_UR
   "extra_skills": ["react", "github actions"],
   "recommendations": [
     "A vaga exige postgresql. Crie um projeto prático e publique no GitHub com documentação clara."
-  ]
+  ],
+  "career_improvement_plan": {
+    "summary": "Plano gerado a partir das lacunas reais da análise.",
+    "items": [
+      {
+        "skill": "postgresql",
+        "gap_type": "missing",
+        "focus_area": "backend",
+        "study": "Estude os fundamentos de PostgreSQL aplicados a APIs.",
+        "practice": "Crie um projeto com consultas, migrations e documentação.",
+        "resume_guidance": "Inclua PostgreSQL no currículo somente depois de ter evidência prática.",
+        "profile_guidance": "Publique o projeto no GitHub e descreva as decisões técnicas.",
+        "resources": ["Documentação oficial do PostgreSQL"]
+      }
+    ],
+    "honesty_note": "Este plano não promete emprego, entrevista ou aprovação."
+  }
 }
 ```
 
@@ -185,7 +202,18 @@ cd ../frontend
 npm run build
 ```
 
-A suíte cobre parser, extração de skills, matching, score, recomendações, rotas da API, persistência, histórico, analytics, matching semântico e feedback via LLM (estes dois últimos com mock/stub, sem dependência de rede real). Detalhes de cobertura em [docs/technical-details.md](docs/technical-details.md#testes-e-ci).
+A suíte cobre parser, extração de skills, matching, score, recomendações, rotas da API, persistência, histórico, analytics, matching semântico e feedback via LLM (estes dois últimos com mock/stub, sem dependência de rede real). A validação local mais recente registrou **92.29% de cobertura**, acima do mínimo de 80% imposto pelo CI. Detalhes de cobertura em [docs/technical-details.md](docs/technical-details.md#testes-e-ci).
+
+Atalhos disponíveis no `Makefile`:
+
+```bash
+make lint
+make format-check
+make test
+make build-frontend
+make up
+make down
+```
 
 ---
 
